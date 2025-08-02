@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import localFont from 'next/font/local'
+import { ClerkProvider } from '@clerk/nextjs'
 import './globals.css'
 import TanstackClientProvider from '@/components/providers/tanstack-client-provider'
 
@@ -15,8 +16,8 @@ const geistMono = localFont({
 })
 
 export const metadata: Metadata = {
-  title: 'CodeGuide Starter Pro',
-  description: 'Starter kit from codeguide.dev',
+  title: 'Mockcodes - Turn UI Screenshots into Working Code',
+  description: 'Upload UI screenshots and get optimized prompts that scaffold complete projects with Tailwind CSS and shadcn UI.',
 }
 
 export default function RootLayout({
@@ -25,10 +26,12 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en">
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-        <TanstackClientProvider>{children}</TanstackClientProvider>
-      </body>
-    </html>
+    <ClerkProvider>
+      <html lang="en">
+        <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+          <TanstackClientProvider>{children}</TanstackClientProvider>
+        </body>
+      </html>
+    </ClerkProvider>
   )
 }
