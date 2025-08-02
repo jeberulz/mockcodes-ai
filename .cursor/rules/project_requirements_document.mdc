@@ -1,0 +1,162 @@
+---
+description: Apply these rules when making changes to the project
+globs:
+alwaysApply: true
+---
+
+Update this rule if user requested changes to the project requirement, etc.
+# Mockcodes Project Requirements Document (PRD)
+
+## 1. Project Overview
+
+Mockcodes is a micro-SaaS web application that turns static UI screenshots (landing pages or mobile interfaces) into working HTML, CSS, and JavaScript code automatically using AI. A user simply uploads a PNG or JPEG screenshot (up to 5 MB), and Mockcodes generates optimized text prompts for AI code agents (like Cursor, Bolt, GPT-4o, or Claude 3 Sonnet). Those prompts are then fed to a local Docker-hosted agent that scaffolds a simple, Tailwind CSS + shadcn UI project, ready for prototyping and deployment.
+
+This platform is aimed at non-expert designers, product managers, and developers who struggle to write effective AI prompts and want a fast way to go from a design mockup to a live prototype. Key objectives are:
+
+*   Remove manual prompt engineering by auto-generating high-quality prompts
+*   Deliver clean, maintainable code that matches the UI screenshot
+*   Provide flexible code access (CLI snippet for Cursor, raw copy/paste, ZIP download)
+*   Offer an easy subscription model with monthly quotas and on-demand add-ons
+
+Success will be measured by user adoption (sign-ups, active projects), prompt conversion accuracy, code quality (UI match), and system stability under concurrent usage.
+
+## 2. In-Scope vs. Out-of-Scope
+
+### In-Scope (Version 1)
+
+*   User authentication (email/password or social login) via Supabase & Clerk
+*   Two user roles: Standard Users (upload/convert/manage projects) and Admins (user/subscription oversight)
+*   Screenshot upload (PNG/JPEG ≤ 5 MB) with frontend preview
+*   AI-driven UI analysis & automated prompt generation
+*   Docker-hosted local AI agent integration for code scaffolding (HTML/CSS/JS with Tailwind + shadcn)
+*   Live preview of generated prototype in browser
+*   Code delivery options:\
+    • CLI command snippet for Cursor integration\
+    • Raw code copy (HTML/CSS/JS files)\
+    • ZIP download of full project
+*   Project dashboard with metadata: name, description, tags, creation date, last modified, prompt count, status
+*   Subscription tiers (Starter $15/mo: 1 project +5 prompts; Pro $39–45/mo: unlimited) with Stripe billing
+*   Pay-as-you-go add-on prompt batches via Stripe
+*   Admin portal for user/subscription management
+
+### Out-of-Scope (Phase 1)
+
+*   Multi-framework support beyond Tailwind CSS + shadcn UI
+*   Integration with external Git hosting (e.g., GitHub)
+*   Real-time collaborative editing
+*   Advanced AI tuning/custom model training
+*   Mobile app or desktop native client
+*   Analytics dashboards or usage reports beyond basic metrics
+
+## 3. User Flow
+
+When a visitor lands on the Mockcodes site, they see a clean landing page describing the AI-powered design-to-code workflow, pricing tiers, and a call-to-action to sign up or log in. After signing up (email/password or social provider), the user is redirected to their personalized dashboard, which shows existing projects in a list view with metadata and a summary of remaining monthly prompts.
+
+To convert a new design, the user clicks “New Project,” uploads a PNG/JPEG screenshot (≤ 5 MB), and watches a progress bar as the AI extracts UI elements and builds an optimized prompt. Once the prompt is ready, the user can review or tweak details (colors, typography) before sending it to the local AI agent. Within seconds, a live prototype preview appears. The user then chooses to copy a CLI snippet for Cursor, copy raw code files, or download a ZIP archive. Throughout the process, prompt usage counts down; if they near their limit, a banner suggests purchasing additional prompt batches via Stripe.
+
+## 4. Core Features
+
+*   **Authentication & Roles**\
+    • Email/password & social login (Clerk + Supabase Auth)\
+    • Standard users vs. Admins with role-based permissions
+*   **Screenshot Upload & Validation**\
+    • Accept PNG/JPEG up to 5 MB\
+    • Client-side preview and size/type checks
+*   **AI-Driven UI Analysis**\
+    • Vision pipeline to detect layout structures, typography, colors, components\
+    • Generates human-readable prompt describing UI for code conversion
+*   **Automated Prompt Generation**\
+    • Creates optimized prompts for AI code agents (Cursor, Bolt, GPT-4o, Claude 3 Sonnet)\
+    • Editable by users for fine-tuning
+*   **Local AI Agent Integration**\
+    • Docker-hosted service running on servers\
+    • Uses GPT-4o or Claude 3 Sonnet to scaffold HTML/CSS/JS with Tailwind + shadcn UI
+*   **Live Preview & Code Inspection**\
+    • Embedded browser preview of generated prototype\
+    • Responsive behavior testing
+*   **Code Delivery Options**\
+    • CLI snippet for Cursor IDE integration\
+    • Copy raw HTML/CSS/JS files\
+    • ZIP download of full project
+*   **Project Dashboard**\
+    • List of projects with metadata: name, desc, tags, dates, prompt count, status\
+    • Actions: view, edit prompt, duplicate, archive, delete
+*   **Subscription & Billing**\
+    • Stripe subscription management (Starter & Pro tiers)\
+    • Monthly quotas reset, no rollover\
+    • Pay-as-you-go prompt add-ons with usage alerts
+*   **Admin Portal**\
+    • User account & subscription oversight\
+    • System metrics and moderation tools
+
+## 5. Tech Stack & Tools
+
+*   **Frontend**\
+    • Next.js 14 (App Router) – React framework for server-rendered pages\
+    • TypeScript – typed JavaScript\
+    • Tailwind CSS – utility-first CSS framework\
+    • shadcn UI – set of prebuilt React components
+*   **Backend & Storage**\
+    • Supabase – Postgres database, auth, and file storage\
+    • Clerk – authentication service\
+    • Stripe – subscription and payment APIs
+*   **AI & Agents**\
+    • OpenAI GPT-4o & GPT-4o1 – code generation models\
+    • Anthropic Claude 3 Sonnet – hybrid reasoning model\
+    • Cursor & Claude Code – AI-powered coding assistants/IDEs\
+    • Docker – containerization for consistent agent environments
+*   **Hosting & Deployment**\
+    • Vercel – front- and back-end hosting with CI/CD\
+    • Docker (self-hosted on server) for AI agent containers
+*   **Developer Tools**\
+    • IDE plugins: Cursor, Claude Code\
+    • GitHub (repo: CodeGuide Starter Pro)
+
+## 6. Non-Functional Requirements
+
+*   **Performance**\
+    • Screenshot processing & prompt generation under 10 s for single upload\
+    • Live preview render within 2 s
+*   **Scalability**\
+    • Auto-scale Docker agent containers to handle concurrent users\
+    • CDN for static asset delivery
+*   **Security**\
+    • HTTPS for all traffic\
+    • JWT-based sessions via Supabase & Clerk\
+    • Stripe PCI-compliant payment handling\
+    • Role-based access control (RBAC) for admin vs. standard users
+*   **Usability**\
+    • Responsive UI for desktop & mobile browsers\
+    • Clear progress indicators and error messages\
+    • Accessible forms (ARIA labels, keyboard navigation)
+*   **Compliance**\
+    • GDPR data handling (user data in EU regions)\
+    • Data retention policy for project assets
+
+## 7. Constraints & Assumptions
+
+*   The local AI agent requires reliable GPU/CPU resources on Docker hosts.
+*   GPT-4o and Claude 3 Sonnet availability and API quotas are sufficient for initial user load.
+*   Supabase free tier limits (rows, upload bandwidth) will be monitored; upgrade as needed.
+*   Users have modern browsers with JavaScript enabled.
+*   Quotas reset on calendar month boundaries; no carry-over.
+
+## 8. Known Issues & Potential Pitfalls
+
+*   **API Rate Limits**\
+    • Hitting OpenAI or Anthropic quotas may block prompt generation.\
+    • Mitigation: implement exponential backoff and user warnings; track usage.
+*   **Large File Uploads**\
+    • 5 MB images could slow down on poor connections.\
+    • Mitigation: client-side compression suggestion and upload progress bar.
+*   **Docker Container Scaling**\
+    • Overloading a single host could cause slowdowns.\
+    • Mitigation: auto-scale containers or add hosts; monitor resource metrics.
+*   **Prompt Quality Variance**\
+    • AI might misinterpret complex designs.\
+    • Mitigation: allow users to edit prompts; guide them with inline tips.
+*   **Subscription & Billing Edge Cases**\
+    • Race conditions when multiple add-ons purchased simultaneously.\
+    • Mitigation: idempotent webhook handling in Stripe integration.
+
+This document provides a clear, unambiguous foundation for all subsequent technical specifications—frontend guidelines, backend architecture, security rules, and implementation plans—ensuring that each team or AI assistant can proceed without missing information.

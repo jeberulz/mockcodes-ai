@@ -1,0 +1,215 @@
+---
+description: Apply these rules when making changes to the project
+globs:
+alwaysApply: true
+---
+
+Update this rule if user requested changes to the project requirement, etc.
+# Backend Structure Document
+
+## 1. Backend Architecture
+
+**Overview**
+
+*   We use a micro-services style approach, where core application logic, database, authentication, AI agents, and payment processing each have clearly defined roles.
+*   The Next.js backend (API routes) handles web requests, orchestrates calls to Supabase, Clerk, AI agents, and Stripe, and returns JSON or ZIP payloads to the frontend.
+*   A local Docker-hosted AI agent runs separately to keep heavy AI workloads off the primary server.
+
+**Design Patterns & Frameworks**
+
+*   **Model-View-Controller (MVC)**: Controllers in API routes, models in Supabase, views handled by the frontend.
+*   **Adapter/Facade Pattern**: Wrappers around OpenAI, Anthropic, Supabase, Clerk, and Stripe to present a unified interface.
+*   **Event-Driven for Payments**: Stripe webhooks trigger backend events (e.g., quota updates).
+
+**Scalability, Maintainability, Performance**
+
+*   **Scalability**: Vercel’s serverless functions auto-scale with demand. Docker-hosted AI agent can be scaled horizontally by running multiple containers behind a load balancer.
+*   **Maintainability**: Clear separation of concerns. Each integration (AI, auth, billing) is isolated in its own utility module.
+*   **Performance**: Caching AI prompts, use of Supabase edge functions for low-latency queries, global CDN via Vercel.
+
+## 2. Database Management
+
+**Technology Stack**
+
+*   Database type: Relational (SQL)
+*   Primary system: Supabase (PostgreSQL)
+*   Storage: Supabase Storage for screenshots and generated code archives
+*   Auth: Clerk (leveraging JWTs) alongside Supabase Auth for user data linking
+
+**Data Handling**
+
+*   **Structure**: All core entities (users, projects, prompts, subscriptions, payments) in PostgreSQL tables.
+
+*   **Access**: Backend uses Supabase client libraries for CRUD operations.
+
+*   **Practices**:
+
+    *   Soft deletes for user data (status flags rather than hard deletes).
+    *   Indexing on foreign keys (`user_id`, `project_id`) and frequently queried fields (`created_at`, `status`).
+    *   Batched writes for prompt logs to reduce transaction overhead.
+    *   Automatic daily backups managed by Supabase.
+
+## 3. Database Schema
+
+### 3.1 Human-Friendly Overview
+
+*   **Users**: Personal details, roles, and link to Clerk auth.
+*   **Projects**: Metadata (name, description, tags), owner, status, code type, prompt usage.
+*   **Prompts**: Text prompts sent to AI, linked to a project, agent used, timestamp.
+*   **Subscriptions**: Stripe subscription records, quota limits, add-on packs.
+*   **Payments**: Individual payment events via Stripe.
+
+### 3.2 SQL Schema (PostgreSQL)
+
+`CREATE TABLE users ( id UUID PRIMARY KEY, email TEXT UNIQUE NOT NULL, name TEXT, role TEXT DEFAULT 'user', created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(), last_login_at TIMESTAMP WITH TIME ZONE, status TEXT DEFAULT 'active' ); CREATE TABLE projects ( id UUID PRIMARY KEY, user_id UUID REFERENCES users(id), name TEXT NOT NULL, description TEXT, tags TEXT[], code_type TEXT, status TEXT DEFAULT 'active', prompt_count INTEGER DEFAULT 0, created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(), last_modified_at TIMESTAMP WITH TIME ZONE DEFAULT NOW() ); CREATE TABLE prompts ( id UUID PRIMARY KEY, project_id UUID REFERENCES projects(id), content TEXT NOT NULL, agent_used TEXT, created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW() ); CREATE TABLE subscriptions ( id UUID PRIMARY KEY, user_id UUID REFERENCES users(id), stripe_subscription_id TEXT UNIQUE NOT NULL, status TEXT, start_date DATE, current_period_end DATE, monthly_quota INTEGER, add_on_packs INTEGER DEFAULT 0 ); CREATE TABLE payments ( id UUID PRIMARY KEY, user_id UUID REFERENCES users(id), stripe_payment_id TEXT UNIQUE NOT NULL, amount_cents INTEGER, currency TEXT, paid_at TIMESTAMP WITH TIME ZONE, status TEXT );`
+
+## 4. API Design and Endpoints
+
+**Approach**: RESTful JSON APIs via Next.js routes.
+
+**Key Endpoints**:
+
+1.  **Authentication** (via Clerk)
+
+    *   Sign-up & sign-in handled on the frontend. Clerk issues JWTs.
+    *   `GET /api/auth/session` – verify session and user info.
+
+2.  **Project Management**
+
+    *   `GET /api/projects` – list user’s projects.
+    *   `POST /api/projects` – create a new project.
+    *   `GET /api/projects/:id` – get project details.
+    *   `PATCH /api/projects/:id` – update name, description, tags.
+    *   `DELETE /api/projects/:id` – archive project.
+
+3.  **Screenshot Upload**
+
+    *   `POST /api/projects/:id/upload` – multipart upload to Supabase Storage.
+
+4.  **Prompt & Code Generation**
+
+    *   `POST /api/projects/:id/prompts` – generate or save custom prompt.
+    *   `POST /api/projects/:id/generate` – send prompt to local AI agent, return generated code URL or payload.
+
+5.  **Code Delivery**
+
+    *   `GET /api/projects/:id/code?format=zip` – download ZIP.
+    *   `GET /api/projects/:id/code?format=raw` – retrieve raw code JSON.
+    *   `GET /api/projects/:id/cli-script` – provide Cursor CLI install command.
+
+6.  **Billing & Subscriptions**
+
+    *   `POST /api/stripe/create-checkout-session` – start checkout.
+    *   `POST /api/webhooks/stripe` – Stripe webhook receiver for subscription and payment events.
+    *   `GET /api/subscriptions` – fetch current quota and add-ons.
+
+7.  **Admin Portal**
+
+    *   `GET /api/admin/users` – list all users.
+    *   `GET /api/admin/subscriptions` – overview of active subscriptions.
+    *   `PATCH /api/admin/users/:id` – change user role or status.
+
+## 5. Hosting Solutions
+
+**Frontend & Main Backend**
+
+*   Provider: Vercel (serverless functions)
+
+*   Benefits:
+
+    *   Instant global deployment with CDN
+    *   Automatic SSL/TLS
+    *   Zero-configuration scaling
+    *   Pay-as-you-go pricing
+
+**Database & Storage**
+
+*   Supabase hosted PostgreSQL & Storage buckets
+
+*   Benefits:
+
+    *   Managed backups and updates
+    *   Fine-grained row-level security
+
+**AI Agent**
+
+*   Docker containers on a self-hosted Linux server or cloud VM (e.g., DigitalOcean, AWS EC2)
+
+*   Uses Nginx reverse proxy for routing.
+
+*   Benefits:
+
+    *   Full control over GPU/CPU resources
+    *   Easy scaling by adding more container instances
+
+**Third-Party Services**
+
+*   OpenAI & Anthropic accessed via secure HTTPS APIs
+*   Stripe hosted billing portal and webhooks
+
+## 6. Infrastructure Components
+
+*   **Load Balancer**: Vercel’s built-in edge load balancing for serverless functions.
+
+*   **CDN**: Vercel’s edge network caches static assets (JS, CSS, images).
+
+*   **Caching**:
+
+    *   Edge caching for API responses with stale-while-revalidate headers.
+    *   Possible Redis instance for prompt caching (future enhancement).
+
+*   **Reverse Proxy**: Nginx on AI agent host to route `/generate` calls to Docker containers.
+
+*   **Storage**: Supabase Storage handles screenshot and code ZIP storage with public/private bucket policies.
+
+*   **Environment Variables**: Managed in Vercel Dashboard and Docker host via `.env` files.
+
+## 7. Security Measures
+
+*   **Transport Security**: HTTPS/TLS enforced on all endpoints (Vercel auto-TLS).
+
+*   **Authentication & Authorization**:
+
+    *   Clerk for user sign-up/in, session management.
+    *   JWTs validated on each request.
+    *   Role-based access control (standard user vs. admin).
+
+*   **Data Encryption**:
+
+    *   At rest: Supabase encrypts database and storage.
+    *   In transit: All API calls use TLS.
+
+*   **Input Validation & Rate Limiting**:
+
+    *   Validate file size/type (max 5MB, PNG/JPEG) on upload.
+    *   Throttle heavy endpoints (`/generate`, `/upload`) to prevent abuse.
+
+*   **Secrets Management**:
+
+    *   Stripe, OpenAI, Anthropic keys in Vercel environment variables.
+    *   Docker host secrets in a locked `.env` and restricted file permissions.
+
+*   **Compliance**:
+
+    *   GDPR-aware data retention policies.
+    *   Stripe’s PCI-compliant billing flow.
+
+## 8. Monitoring and Maintenance
+
+**Monitoring Tools**
+
+*   Vercel Analytics for request volumes and latency.
+*   Supabase dashboard logs and query performance metrics.
+*   Sentry for error tracking in serverless functions.
+*   Stripe Dashboard for payment events and webhooks.
+
+**Maintenance Practices**
+
+*   **Automated Backups**: Supabase daily snapshots.
+*   **Dependency Updates**: Routine audits and `npm audit` for frontend/backend.
+*   **Health Checks**: Endpoint `/api/health` returns service statuses.
+*   **Alerts**: Slack or email alerts for 5xx rates, webhook failures, quota overruns.
+
+## 9. Conclusion and Overall Backend Summary
+
+The Mockcodes backend uses a well-structured, micro-services approach combining Next.js serverless functions, a managed PostgreSQL via Supabase, secure authentication with Clerk, and billing through Stripe. A self-hosted Docker AI agent keeps heavy AI workloads separate from core infrastructure, ensuring performance. Global hosting on Vercel and CDN integration delivers low latency worldwide. Security is enforced at every layer—TLS, JWT, role limits—and the system is observable through established monitoring tools. This setup aligns closely with project goals: a scalable, maintainable, performant, and secure platform that turns UI screenshots into production-ready code for non-expert users.

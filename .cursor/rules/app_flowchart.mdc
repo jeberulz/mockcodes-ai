@@ -1,0 +1,40 @@
+---
+description: Apply these rules when making changes to the project
+globs:
+alwaysApply: true
+---
+
+Update this rule if user requested changes to the project requirement, etc.
+flowchart TD
+  HomePage[Home Page]
+  HomePage --> Login{User Exists}
+  Login -->|No| SignUp[Sign Up]
+  Login -->|Yes| SignIn[Sign In]
+  SignUp --> EmailMethod{Registration Method}
+  EmailMethod -->|Email| EmailForm[Email Password Form]
+  EmailMethod -->|Social| SocialAuth[Social Login]
+  EmailForm --> VerifyEmail[Verify Email]
+  VerifyEmail --> Dashboard[Dashboard]
+  SocialAuth --> Dashboard
+  SignIn --> Dashboard
+  SignIn -->|Invalid| LoginError[Login Error]
+  Dashboard --> NewProject[New Project]
+  Dashboard --> ProjectList[View Projects]
+  NewProject --> UploadScreen[Upload Screenshot]
+  UploadScreen -->|Valid| ProcessImage[Process Screenshot]
+  UploadScreen -->|Invalid| UploadError[Upload Error]
+  ProcessImage --> PromptGen[Generate Prompt]
+  PromptGen --> CustomizePrompt[Review Customize Prompt]
+  CustomizePrompt --> CodeGen[Send to AI Agent]
+  CodeGen -->|Success| LivePreview[Live Preview]
+  CodeGen -->|Failure| GenError[Generation Error]
+  LivePreview --> DeliveryOptions{Delivery Options}
+  DeliveryOptions --> CLISnippet[CLI Snippet]
+  DeliveryOptions --> RawCode[Raw Code View]
+  DeliveryOptions --> DownloadZIP[Download ZIP]
+  LivePreview --> Dashboard
+  Dashboard --> Settings[Settings]
+  Settings -->|Save Changes| Dashboard
+  Dashboard --> AdminPortal[Admin Portal]
+  AdminPortal -->|Authorized| AdminDashboard[Admin Dashboard]
+  AdminPortal -->|Unauthorized| Unauthorized[Unauthorized]

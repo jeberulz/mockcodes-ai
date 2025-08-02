@@ -1,0 +1,81 @@
+---
+description: Apply these rules when making changes to the project
+globs:
+alwaysApply: true
+---
+
+Update this rule if user requested changes to the project requirement, etc.
+# Implementation plan
+
+## Phase 1: Environment Setup
+
+1.  Prevalidation: Check if current directory contains a Git repo or `package.json` to avoid reinitializing an existing project (Project Overview).
+2.  Initialize a new Git repository in the project root by running `git init` (Project Overview).
+3.  Install Node.js v20.2.1 and Python 3.11.4 if not already installed (Tech Stack: Core Tools).
+4.  Validation: Run `node -v` and `python --version` to confirm versions are exactly v20.2.1 and 3.11.4 (Tech Stack: Core Tools).
+5.  Check that Docker is installed on the machine (Tech Stack: Containerization).
+6.  Validation: Run `docker --version` to confirm Docker is functional (Tech Stack: Containerization).
+7.  Create `cursor_metrics.md` in the project root for Cursor usage metrics and refer to `cursor_project_rules.mdc` for next steps (Tech Stack: AI Code Assistants).
+8.  Create a `.cursor` directory in the project root if it doesn’t exist (Tech Stack: AI Code Assistants).
+9.  Create `.cursor/mcp.json` inside `.cursor` (Tech Stack: AI Code Assistants).
+10. Add `.cursor/mcp.json` to `.gitignore` to prevent committing secrets (Tech Stack: AI Code Assistants).
+11. Populate `.cursor/mcp.json` with the following configuration and instruct the user to obtain a Supabase connection string here: <https://supabase.com/docs/guides/getting-started/mcp#connect-to-supabase-using-mcp> (Tech Stack: Backend & Storage):
+
+`// macOS {"mcpServers": {"supabase": {"command": "npx", "args": ["-y", "@modelcontextprotocol/server-postgres", "<connection-string>"]}}} // Windows {"mcpServers": {"supabase": {"command": "cmd", "args": ["/c", "npx", "-y", "@modelcontextprotocol/server-postgres", "<connection-string>"]}}}`
+
+## Phase 2: Frontend Development
+
+1.  Run `npx create-next-app@14 frontend --typescript --tailwind` to scaffold a Next.js 14 app with the App Router, TypeScript, and Tailwind CSS (Note: Next.js 14 is better suited with current AI coding tools) (Tech Stack: Frontend).
+2.  Validation: In `/frontend`, run `npm run dev` and ensure the Next.js dev server starts on `http://localhost:3000` (Tech Stack: Frontend).
+3.  In `/frontend`, install shadcn UI with `npm install @shadcn/ui` (Tech Stack: Frontend).
+4.  Configure `/frontend/tailwind.config.js` by extending Tailwind with shadcn presets (Tech Stack: Frontend).
+5.  Install `@clerk/clerk-react` in `/frontend` and configure `<ClerkProvider>` in `/frontend/app/layout.tsx` using `CLERK_FRONTEND_API` and other env vars (Core Features: User Authentication & Roles).
+6.  Create the landing page `/frontend/app/page.tsx` with email/password and social login UI using Clerk components (App Flow Step 1).
+7.  Create the dashboard page `/frontend/app/dashboard/page.tsx` displaying a list of projects, remaining prompt quota, and a “New Project” button (App Flow Step 2).
+8.  Create `/frontend/components/Upload.tsx` implementing drag-and-drop screenshot upload (PNG/JPEG up to 5 MB) with client-side preview (Core Features: Screenshot Upload).
+9.  Create `/frontend/components/PromptEditor.tsx` with a textarea to display and allow editing of the AI-generated prompt (Core Features: AI-Powered Prompt Generation).
+10. Create the preview page `/frontend/app/preview/page.tsx` that renders an interactive UI preview via an `<iframe>` (App Flow Step 6).
+11. Create `/frontend/components/CodeAccess.tsx` providing raw HTML/CSS/JS code display and a “Download ZIP” button (Core Features: Code Preview & Delivery).
+
+## Phase 3: Backend Development
+
+1.  In the project root, run `supabase init --project backend` to initialize a Supabase project in `/backend` (Tech Stack: Backend & Storage).
+2.  Create `/backend/db/schema.sql` defining tables and relations: `users`, `projects`, `prompts`, `prompt_usage`, `subscriptions`, `roles`, and `project_metadata` (Tech Stack: Backend & Storage).
+3.  Run `supabase db push --project backend` to apply the schema, then verify tables appear in the Supabase dashboard (Tech Stack: Backend & Storage).
+4.  In Supabase dashboard or via CLI, configure a storage bucket named `artifacts` for storing generated code (Core Features: Code Preview & Delivery).
+5.  Create the API route `POST /api/v1/upload` in `/backend/src/routes/upload.ts` to accept screenshot files, validate type/size, and store them in the `artifacts` bucket (App Flow Step 3).
+6.  Create the API route `POST /api/v1/generate-prompt` in `/backend/src/routes/prompt.ts` that sends the uploaded image to GPT-4o and Claude 3 Sonnet and returns the generated prompt (Core Features: AI-Powered Prompt Generation).
+7.  Create `/ai-agent/Dockerfile` to containerize the local AI agent with dependencies for GPT-4o or Claude 3 Sonnet (Core Features: AI Agent Execution).
+8.  Build and run the AI agent container via:
+
+`docker build -t mockcodes-ai-agent ./ai-agent docker run -d --name ai-agent mockcodes-ai-agent `(Tech Stack: Containerization).
+
+1.  Create the API route `POST /api/v1/scaffold` in `/backend/src/routes/scaffold.ts` that forwards the prompt to the local agent, receives scaffolded HTML/CSS/JS, and saves it to `artifacts` (App Flow Step 5).
+2.  Create the API route `GET /api/v1/artifacts/:id` in `/backend/src/routes/artifacts.ts` to serve code ZIPs or raw files by artifact ID (Core Features: Code Access).
+3.  Implement `/backend/src/services/stripe.ts` with subscription tier definitions, Stripe Webhook endpoints for payments, usage tracking, and pay-as-you-go logic (Core Features: Subscription Billing).
+
+## Phase 4: Integration
+
+1.  In `/frontend/components/Upload.tsx`, connect the upload form to `POST /api/v1/upload` using `fetch` and handle the returned image URL (Integration: App Flow Step 3).
+2.  In `/frontend/components/PromptEditor.tsx`, connect to `POST /api/v1/generate-prompt` and display the returned prompt for user editing (Integration: App Flow Step 4).
+3.  In `/frontend/app/preview/page.tsx`, invoke `POST /api/v1/scaffold` when the user confirms the prompt and capture the artifact ID for preview (Integration: App Flow Step 5).
+4.  In `/frontend/app/preview/page.tsx`, fetch `/api/v1/artifacts/:id` to display the live preview and enable code download via CodeAccess component (Integration: App Flow Step 6).
+5.  Validation: Perform an end-to-end manual test—upload a screenshot, generate a prompt, scaffold code, preview UI, and download ZIP to verify full flow (Q&A: Pre-Launch Checklist).
+
+## Phase 5: Deployment
+
+1.  Create `vercel.json` in the project root to configure two builds: one for `/frontend` (Next.js) and one for `/backend/src/routes` (Serverless Functions) (Tech Stack: Deployment).
+2.  In the Vercel dashboard, set environment variables: `SUPABASE_URL`, `SUPABASE_ANON_KEY`, `SUPABASE_SERVICE_ROLE_KEY`, `OPENAI_API_KEY`, `CLAUDE_API_KEY`, `STRIPE_SECRET_KEY`, `CLERK_FRONTEND_API` (Tech Stack: Deployment).
+3.  Run `vercel --prod` from the project root to deploy both frontend and backend to Vercel (Tech Stack: Deployment).
+4.  Create `docker-compose.yml` in the root to orchestrate production deployment of the AI agent container on your server (Tech Stack: Containerization).
+5.  Add a GitHub Actions workflow in `.github/workflows/deploy.yml` that triggers `vercel --prod` on pushes to `main` and deploys the AI agent via SSH or Docker APIs (Tech Stack: CI/CD).
+
+## Phase 6: Admin & Maintenance
+
+1.  Create the admin portal page `/frontend/app/admin/page.tsx` to list users, subscriptions, and prompt usage (App Flow Step 9).
+2.  Create the API route `GET /api/v1/admin/users` in `/backend/src/routes/admin/users.ts` to fetch all users with subscription details (Admin Portal).
+3.  Implement middleware in `/backend/src/middleware/roles.ts` that checks the authenticated user’s role from Supabase and restricts admin endpoints accordingly (User Roles).
+4.  Create a scheduled job `/backend/src/jobs/resetUsage.ts` that runs monthly (using Vercel Cron) to reset `prompt_usage` counts for all users (Subscription Quotas).
+5.  Add an E2E test `/tests/e2e/projectFlow.test.ts` covering the user flow: upload, generate prompt, scaffold, preview, download (Q&A: Pre-Launch Checklist).
+6.  Add an E2E test `/tests/e2e/adminFlow.test.ts` covering the admin portal’s user and subscription management actions (App Flow Step 9).
+7.  Final validation: Run `npm run lint` in both `/frontend` and `/backend`, run all unit tests with `npm test`, and confirm 100% coverage for critical modules (Q&A: Pre-Launch Checklist).

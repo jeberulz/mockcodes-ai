@@ -1,0 +1,180 @@
+---
+description: Apply these rules when making changes to the project
+globs:
+alwaysApply: true
+---
+
+Update this rule if user requested changes to the project requirement, etc.
+## Project Overview
+
+*   **Type:** cursor_project_rules
+*   **Description:** I'm developing a web app called Mockcodes, a micro SaaS platform designed to streamline the process of converting UI screenshots into code (HTML/CSS/JS) using AI. Users upload a UI screenshot and receive optimized prompts that scaffold a complete simple project with Tailwind CSS and shadcn UI.
+*   **Primary Goal:** Remove manual prompt engineering by auto-generating high-quality prompts and deliver clean, maintainable code that matches the UI screenshot.
+
+## Project Structure
+
+### Framework-Specific Routing
+
+*   **Directory Rules:**
+
+    *   Next.js 14 (App Router): `app/[route]/page.tsx` conventions with nested layouts
+    *   Next.js (Pages Router): `pages/[route].tsx` flat file pattern
+    *   React Router 6: `src/routes/` with `createBrowserRouter`
+
+### Core Directories
+
+*   **Versioned Structure:**
+
+    *   app/: Next.js 14 App Router entry point (pages, layouts, API handlers)
+    *   pages/: Next.js Pages Router entry point (only if Pages Router used)
+    *   src/components/: Reusable UI components (TypeScript + shadcn UI)
+    *   src/hooks/: Custom React hooks
+    *   src/lib/ or src/utils/: Feature-specific helpers (AI, Stripe, Supabase)
+    *   public/: Static assets and user uploads (enforce max 5 MB)
+    *   docker/: Dockerfiles and `docker-compose.yml` for AI agents
+
+### Key Files
+
+*   **Stack-Versioned Patterns:**
+
+    *   `app/layout.tsx`: Next.js 14 root layout with Tailwind CSS & shadcn providers
+    *   `app/page.tsx`: Next.js 14 home page
+    *   `app/api/process/route.ts`: Next.js 14 Route Handler for screenshot analysis
+    *   `pages/_app.tsx`: Next.js Pages Router entry (not used in App Router projects)
+    *   `docker/docker-compose.yml`: Defines Docker service for AI agent with GPU/CPU configs
+    *   `vercel.json`: Vercel configuration for rewrites and environment settings
+
+## Tech Stack Rules
+
+*   **Version Enforcement:**
+
+    *   next@14: App Router required; disallow `pages/` folder when using `app/`
+    *   <typescript@5.x>: `strict: true` enabled in `tsconfig.json`
+    *   <tailwindcss@3.x>: Purge configured in `tailwind.config.js` using `app/**/*.tsx` and `src/components/**/*.tsx`
+    *   shadcn-ui@latest: Components under `src/components/ui/`
+    *   <supabase@2.x>: Initialize client in `src/utils/supabase.ts`; enforce RLS policies
+    *   <clerk@4.x>: Use `<ClerkProvider>` in `app/layout.tsx`; protect routes with `auth()` server action
+    *   stripe@latest: Use Payment Intents API; configure webhooks in `app/api/webhooks/route.ts`
+    *   <docker@24.x>: Define AI agent in `docker/docker-compose.yml`; mount volumes for prompt logs
+    *   vercel@latest: Automatic deployments; set `env` for Supabase, Clerk, Stripe, and OpenAI
+
+## PRD Compliance
+
+*   **Non-Negotiable:**
+
+    *   "Accept PNG/JPEG up to 5 MB": enforce client- and server-side validation for uploads.
+    *   "Monthly quotas reset, no rollover": implement calendar-based quota reset logic.
+
+## App Flow Integration
+
+*   **Stack-Aligned Flow:**
+
+    *   Next.js 14 Auth Flow → `app/auth/login/page.tsx` uses server actions integrating Clerk & Supabase
+    *   Screenshot Upload → `app/projects/new/page.tsx` with drag-and-drop, live preview, size/type checks
+    *   Prompt Generation → `app/projects/[id]/prompt/page.tsx` calls server action `app/api/process/route.ts`
+    *   Live Preview → `app/projects/[id]/preview/page.tsx` embedding sandboxed iframe for HTML/CSS/JS output
+    *   Code Export → `app/projects/[id]/export/page.tsx` offering CLI snippet, raw code tabs, and ZIP download
+
+## Best Practices
+
+*   Next.js 14
+
+    *   Use the App Router for layout and page co-location.
+    *   Favor server components for data-heavy pages to improve performance.
+    *   Organize API routes under `app/api/` with granular route handlers.
+
+*   TypeScript
+
+    *   Enable `strict` mode and `noImplicitAny` in `tsconfig.json`.
+    *   Define types for API responses, Supabase schemas, and Stripe objects.
+    *   Use discriminated unions for role-based props (standard vs. admin).
+
+*   Tailwind CSS
+
+    *   Purge unused styles using `content` paths in `tailwind.config.js`.
+    *   Extend the theme for brand colors and spacing.
+    *   Use the JIT mode for smaller build output.
+
+*   shadcn UI
+
+    *   Keep custom variants in `src/components/ui/`.
+    *   Leverage Tailwind tokens for theme consistency.
+    *   Prefer composition over inheritance for styling overrides.
+
+*   Supabase
+
+    *   Centralize client initialization in `src/utils/supabase.ts`.
+    *   Enforce Row-Level Security (RLS) for user-specific data.
+    *   Use realtime subscriptions to update prompt quotas in the dashboard.
+
+*   Clerk Auth
+
+    *   Wrap the entire app in `<ClerkProvider>` at `app/layout.tsx`.
+    *   Use `auth()` server action to guard protected routes.
+    *   Render fallback UI for loading and error states.
+
+*   Stripe
+
+    *   Use the Payment Intents API with idempotent keys.
+    *   Securely handle webhooks in `app/api/webhooks/route.ts`.
+    *   Provide clear error messages on payment failures.
+
+*   Docker
+
+    *   Define AI agent service in `docker/docker-compose.yml` with resource limits.
+    *   Mount host directories for prompt logs and temporary storage.
+    *   Use multi-stage builds for lean production images.
+
+*   Vercel
+
+    *   Configure `vercel.json` for environment variables and route overrides.
+    *   Enable edge caching for static assets.
+    *   Use Preview Deployments for pull request testing.
+
+*   OpenAI GPT-4o
+
+    *   Use function-calling APIs to structure prompts and parse JSON outputs.
+    *   Implement exponential backoff on rate-limit errors.
+    *   Sanitize model inputs and outputs to prevent injection.
+
+*   Anthropic Claude 3 Sonnet
+
+    *   Leverage its hybrid reasoning capabilities for complex UI layouts.
+    *   Batch smaller UI elements into single prompts to reduce API overhead.
+    *   Validate returned code snippets against a schema.
+
+*   Cursor & Claude Code
+
+    *   Provide CLI snippet for Cursor integration in the export page.
+    *   Encourage users to install the IDE extension for real-time suggestions.
+    *   Document common troubleshooting steps in a `README.md`.
+
+*   ChatGPT
+
+    *   Use system messages to enforce style and content constraints.
+    *   Cache repeated queries to reduce token usage.
+    *   Implement user feedback loops to refine prompt quality.
+
+## Rules
+
+*   Derive folder and file patterns directly from the `techStackDoc` versions.
+*   If Next.js 14 App Router is chosen, enforce `app/` directory with nested routes; do not include `pages/`.
+*   If using Pages Router, only use `pages/*.tsx` and disable the App Router.
+*   React Router 6 projects must live under `src/routes/`; do not mix with Next.js routing.
+*   Docker AI agent definitions must reside in `docker/docker-compose.yml`, separate from the Next.js service.
+*   Always enforce client- and server-side validation for uploads, auth, and payments.
+
+## Rules Metrics
+
+Before starting the project development, create a metrics file in the root of the project called `cursor_metrics.md`.
+
+### Instructions:
+
+*   Each time a rule is used as context, update `cursor_metrics.md`.
+
+*   Use the following format for `cursor_metrics.md`: Rules Metrics Usage The number of times each rule is used as context
+
+    *   next-router-rule.mdc: 5
+    *   file-pattern-rule.mdc: 3
+    *   auth-guard-rule.mdc: 4
+    *   ...other rules

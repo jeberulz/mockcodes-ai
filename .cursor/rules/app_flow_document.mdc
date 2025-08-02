@@ -1,0 +1,46 @@
+---
+description: Apply these rules when making changes to the project
+globs:
+alwaysApply: true
+---
+
+Update this rule if user requested changes to the project requirement, etc.
+# App Flow Document for Mockcodes
+
+## Onboarding and Sign-In/Sign-Up
+
+When a new visitor arrives at Mockcodes, they land on a clean and modern homepage that briefly explains the core AI-driven design-to-code workflow, highlights key benefits, and presents clear calls to action for signing up or logging in. A “Sign Up” button prompts users to choose between registering with their email and password or using a social login provider such as Google or GitHub. If they opt for email registration, they enter their email address, choose a password, and receive a confirmation email with a link to verify their account. Once the email is verified, the user is redirected to the main dashboard. Users who choose social login click the provider button, grant permissions, and are immediately brought to their personalized dashboard without separate verification. Existing users click “Log In,” enter their email and password or use social login, and then access the application. A “Forgot Password” link on the login page allows users to submit their email address and receive a reset link. Upon resetting their password, they are returned to the login form and can sign in with their new credentials. A “Log Out” option is always available in the account menu, immediately ending the session and returning the user to the homepage.
+
+## Main Dashboard or Home Page
+
+After signing in, users arrive at the Main Dashboard, which features a top navigation bar showing the user’s name, current subscription plan, and remaining monthly prompts. Below the header, the main area displays a list of existing projects with columns for project name, creation date, last modified date, prompts used, and current status. A prominent “New Project” button sits above the list, inviting users to start a fresh conversion. A collapsible sidebar on the left provides quick links to Projects, New Project, Settings, and, for admins, an Admin Portal. If a user nears their prompt quota, a banner appears under the header with a warning and a link to purchase additional prompt batches. From the dashboard, users click any project name to view details or use action buttons to edit, duplicate, archive, or delete that project. The sidebar and header ensure intuitive navigation to every part of the application.
+
+## Detailed Feature Flows and Page Transitions
+
+### Creating a New Project
+
+When the user clicks “New Project,” they see the Upload Screen, which invites them to drag and drop or select a PNG or JPEG file up to 5 MB. Upon selecting a valid image, a client-side preview of the screenshot appears along with an “Upload” button. Clicking “Upload” triggers a progress indicator and a friendly message explaining that an AI-powered analysis is underway to extract UI elements. Once the analysis is complete, the user is taken to the Prompt Generation screen. Here they see a human-readable prompt that details component structure, color schemes, typography, and Tailwind CSS classes. The prompt is presented in an editable text area, allowing users to tweak any part of it. After reviewing or customizing the prompt, the user clicks “Generate Code” to send the prompt to the server’s Docker-hosted AI agent.
+
+### Code Scaffolding and Live Preview
+
+Once the AI agent finishes scaffolding the project, the user is automatically redirected to the Live Preview page. This page embeds an interactive browser view of the generated HTML, CSS, and JavaScript prototype. The user can click through interactive elements and test responsive behavior in real time. Beneath the preview, three code retrieval options are displayed: a CLI command snippet ready for copying into Cursor, a raw code view with separate tabs for HTML, CSS, and JS files, and a “Download ZIP” button for obtaining the entire scaffolded project as a compressed archive. Users copy whichever format suits their workflow or download the ZIP for offline use.
+
+### Viewing and Managing Existing Projects
+
+From the Main Dashboard, clicking a project name opens the Project Detail page. This page shows all metadata for the selected project, including its description, tags, creation and last modified dates, number of prompts used, and status indicators such as active or archived. Action buttons on this page let the user edit the original prompt, regenerate the code with updates, duplicate the project to start a variant, archive the project to remove it from the default list, or delete it permanently after a confirmation prompt. After any action, the user is returned to either the Project Detail page or back to the dashboard, depending on the operation, with a success notification displayed.
+
+### Admin Portal and Oversight
+
+Administrators access the Admin Portal by clicking the Admin link in the sidebar. They see an overview of all user accounts, subscription plans, and system metrics. Admins can drill into individual user profiles to view project counts, prompt usage, and billing history. From each user’s profile, admins can adjust subscription tiers, manually add prompt credits, issue refunds, or deactivate accounts. A separate Support Requests section lists user-raised issues, which admins can mark as resolved. A Metrics page displays aggregate usage statistics and system health indicators. Admins navigate back to their own projects or to the general dashboard at any time using the top navigation bar.
+
+## Settings and Account Management
+
+Users reach the Settings page by clicking the Settings link in the sidebar or header menu. The first tab under Settings presents Personal Information, where they can update their name, email address, and password. After making changes, the user clicks “Save Changes,” and a confirmation message appears. The second tab, Notifications, offers toggles for receiving email alerts about approaching prompt quotas or monthly usage summaries. The third tab, Subscription & Billing, displays the current plan, next billing date, and number of prompts remaining. Users can upgrade or downgrade their plan via a Stripe checkout modal and purchase additional prompt batches on demand. A “Payment Methods” section within this tab allows users to add or remove credit cards. Billing history is shown as a simple list of past invoices with links to download PDF receipts. A “Back to Dashboard” link at the bottom of the Settings page returns the user to the main application flow.
+
+## Error States and Alternate Paths
+
+If a user enters invalid credentials at login, an inline error message appears below the input fields explaining that the email or password is incorrect. Attempting to access any protected route without authentication redirects the visitor to the login page with a notice that sign-in is required. During the file upload process, selecting a file that exceeds 5 MB or is in an unsupported format triggers an immediate inline warning under the upload control. If network connectivity drops while uploading or generating prompts, a persistent banner appears notifying the user of the issue and will retry automatically. Should the AI analysis or code generation fail, an error screen replaces the progress indicator, offering a “Retry” button and a link to contact support. In billing flows, if a payment attempt is declined, a modal explains the failure and directs the user to update their payment method before retrying. Trying to access admin features as a standard user results in an Unauthorized page with a link back to the dashboard. Non-existent routes show a custom 404 page with navigation back to known sections.
+
+## Conclusion and Overall App Journey
+
+From the moment a user discovers Mockcodes on the landing page through the sign-up and email verification process, the journey remains focused on simplicity and speed. Users quickly land on their personalized dashboard, where they can start new projects by uploading UI screenshots, review and customize AI-generated prompts, and obtain scaffolded code via live preview, CLI snippets, raw code views, or ZIP downloads. Project management features like editing prompts, regenerating code, duplicating, archiving, and deleting keep workflows organized. Subscription management with Stripe handles monthly quotas and on-demand add-ons, while admins have an elevated portal for oversight and support. Error states provide clear guidance for users to recover seamlessly. Throughout every step, Mockcodes delivers a coherent, end-to-end experience that enables non-experts and professionals alike to transform design mockups into working prototypes in minutes.

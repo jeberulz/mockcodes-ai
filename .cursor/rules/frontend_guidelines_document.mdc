@@ -1,0 +1,164 @@
+---
+description: Apply these rules when making changes to the project
+globs:
+alwaysApply: true
+---
+
+Update this rule if user requested changes to the project requirement, etc.
+# Tech Stack Document for Mockcodes
+
+This document explains the technology choices behind Mockcodes in everyday language. Each section describes why we picked certain tools and how they work together to create a fast, reliable, and user-friendly platform.
+
+## Frontend Technologies
+
+These are the tools that power what you see and interact with in your browser:
+
+*   **Next.js 14 (App Router)**
+
+    *   A modern React framework that handles page routing and server-side rendering automatically.
+    *   Improves load times and SEO by pre­rendering pages on the server.
+
+*   **TypeScript**
+
+    *   Adds type checking to JavaScript, catching errors early and making the code more predictable.
+    *   Helps developers work faster and reduces bugs in your interface.
+
+*   **Tailwind CSS**
+
+    *   A utility-first styling framework that lets us build custom designs with pre­built CSS classes.
+    *   Speeds up styling, ensures consistency, and keeps CSS files small.
+
+*   **shadcn UI**
+
+    *   A collection of ready-made, accessible React components styled with Tailwind.
+    *   Lets us assemble screens quickly while maintaining a polished, professional look.
+
+How it enhances user experience:
+
+*   Fast initial loading and smooth page transitions.
+*   Consistent design with minimal custom CSS.
+*   Clean, modular code that’s easy to maintain and update.
+
+## Backend Technologies
+
+These components run behind the scenes, storing data and handling requests:
+
+*   **Supabase** (Database, Auth, Storage)
+
+    *   Provides a hosted PostgreSQL database for storing user info, projects, and metadata.
+    *   Includes built­in user authentication and file storage for screenshot uploads.
+    *   Offers real-time updates, so dashboards refresh automatically when data changes.
+
+*   **Clerk**
+
+    *   Manages sign­up, login, password resets, and social logins (Google, GitHub).
+    *   Works alongside Supabase for secure, role-based access control (Standard Users vs. Admins).
+
+How they support functionality:
+
+*   Securely store user accounts, project details, and images.
+*   Handle roles and permissions so admins can manage subscriptions and users.
+*   Scale automatically as more users join, with minimal maintenance.
+
+## Infrastructure and Deployment
+
+These choices make sure Mockcodes stays online, scales with demand, and updates smoothly:
+
+*   **Vercel**
+
+    *   Hosts the frontend and serverless functions with one-click deployments from GitHub.
+    *   Provides automatic scaling and global content delivery (CDN).
+
+*   **Docker**
+
+    *   Runs the AI code agent in isolated containers on our servers.
+    *   Ensures each AI service (GPT-4o, Claude 3 Sonnet) runs in a consistent environment.
+
+*   **GitHub** (Version Control)
+
+    *   Stores the source code and tracks changes.
+    *   Works with Vercel’s CI/CD pipeline to deploy updates automatically.
+
+*   **CI/CD Pipelines**
+
+    *   Every code push triggers automated tests and deployments.
+    *   Reduces manual steps and ensures stable releases.
+
+Benefits:
+
+*   Rapid, reliable updates with no downtime.
+*   Global performance via edge networks.
+*   Easy rollback if an issue arises.
+
+## Third-Party Integrations
+
+These external services add specialized capabilities without building everything from scratch:
+
+*   **Stripe**
+
+    *   Manages subscription billing (Starter & Pro tiers) and pay-as-you-go prompt add-ons.
+    *   Handles secure credit card processing and invoicing.
+
+*   **OpenAI GPT-4o & GPT-4o1**
+
+    *   Powers AI-driven prompt interpretation and code generation.
+    *   High accuracy in converting UI descriptions into HTML/CSS/JS.
+
+*   **Anthropic Claude 3 Sonnet**
+
+    *   A hybrid AI model for robust reasoning when crafting conversion prompts.
+
+*   **Cursor, Bolt, v0**
+
+    *   AI coding assistants/IDEs that execute the generated code via a CLI snippet.
+    *   Offer real-time suggestions and debugging support in the user’s development environment.
+
+*   **Claude Code**
+
+    *   Terminal-based coding assistant for inspecting and iterating on generated code.
+
+How they enhance functionality:
+
+*   Reliable billing and subscription management via Stripe.
+*   State-of-the-art AI models for prompt and code quality.
+*   Seamless handoff from the browser to developer tools like Cursor.
+
+## Security and Performance Considerations
+
+We’ve built safeguards and optimizations to keep data safe and your experience smooth:
+
+*   **Authentication & Authorization**
+
+    *   HTTPS everywhere, with JWT sessions managed by Supabase & Clerk.
+    *   Role-based access control: Standard Users vs. Admins.
+
+*   **Data Protection**
+
+    *   Encryption at rest for database and file storage.
+    *   PCI compliance for any payment data handled by Stripe.
+
+*   **Upload Validation**
+
+    *   Client-side checks for file type (PNG/JPEG) and size limit (5 MB).
+    *   Progress indicators and retry logic for network issues.
+
+*   **Performance Optimizations**
+
+    *   Image previews generated in the browser before upload.
+    *   CDN caching for static assets and serverless functions on Vercel.
+    *   Auto-scaling Docker containers to handle spikes in AI requests.
+    *   Code splitting in Next.js to load only what's needed per page.
+
+These measures ensure fast load times, reliable file processing, and secure handling of user data.
+
+## Conclusion and Overall Tech Stack Summary
+
+Mockcodes leverages a modern, full­stack approach to transform UI screenshots into working code quickly and reliably:
+
+*   **Frontend:** Next.js 14, TypeScript, Tailwind CSS, shadcn UI for fast, consistent interfaces.
+*   **Backend:** Supabase + Clerk for database, storage, and secure authentication.
+*   **Infrastructure:** Vercel hosting with GitHub-powered CI/CD and Docker containers for AI services.
+*   **Third-Party:** Stripe for billing; OpenAI & Anthropic models plus Cursor, Bolt, v0, and Claude Code for AI-driven code conversion.
+*   **Security & Performance:** HTTPS, JWT, encryption, CDN, auto-scaling, and upload validations.
+
+This stack aligns with Mockcodes’ goals of making design-to-code workflows accessible to non-experts, while ensuring the platform remains scalable, secure, and easy to maintain. The unique combination of AI prompt automation, local Docker-hosted agents, and flexible code delivery sets Mockcodes apart and lets users build prototypes in minutes, not days.
