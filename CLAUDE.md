@@ -1,6 +1,6 @@
-# CLAUDE.md
+# Contributor Guide for Claude Code
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository. It contains essential information about the codebase architecture, development commands, and implementation patterns specific to the Mockcodes project.
 
 ## Common Development Commands
 
