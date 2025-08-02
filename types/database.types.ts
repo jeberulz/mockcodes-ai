@@ -34,6 +34,64 @@ export type Database = {
     }
     public: {
         Tables: {
+            artifacts: {
+                Row: {
+                    artifact_type: string
+                    created_at: string
+                    file_name: string
+                    file_size: number | null
+                    file_url: string
+                    id: string
+                    project_id: string
+                    prompt_id: string | null
+                    user_id: string
+                }
+                Insert: {
+                    artifact_type: string
+                    created_at?: string
+                    file_name: string
+                    file_size?: number | null
+                    file_url: string
+                    id?: string
+                    project_id: string
+                    prompt_id?: string | null
+                    user_id: string
+                }
+                Update: {
+                    artifact_type?: string
+                    created_at?: string
+                    file_name?: string
+                    file_size?: number | null
+                    file_url?: string
+                    id?: string
+                    project_id?: string
+                    prompt_id?: string | null
+                    user_id?: string
+                }
+                Relationships: [
+                    {
+                        foreignKeyName: "artifacts_project_id_fkey"
+                        columns: ["project_id"]
+                        isOneToOne: false
+                        referencedRelation: "projects"
+                        referencedColumns: ["id"]
+                    },
+                    {
+                        foreignKeyName: "artifacts_prompt_id_fkey"
+                        columns: ["prompt_id"]
+                        isOneToOne: false
+                        referencedRelation: "prompts"
+                        referencedColumns: ["id"]
+                    },
+                    {
+                        foreignKeyName: "artifacts_user_id_fkey"
+                        columns: ["user_id"]
+                        isOneToOne: false
+                        referencedRelation: "user_profiles"
+                        referencedColumns: ["id"]
+                    },
+                ]
+            }
             customers: {
                 Row: {
                     id: string
@@ -132,6 +190,104 @@ export type Database = {
                 }
                 Relationships: []
             }
+            projects: {
+                Row: {
+                    code_type: string | null
+                    created_at: string
+                    description: string | null
+                    id: string
+                    name: string
+                    prompt_count: number | null
+                    screenshot_url: string | null
+                    status: string | null
+                    tags: string[] | null
+                    updated_at: string
+                    user_id: string
+                }
+                Insert: {
+                    code_type?: string | null
+                    created_at?: string
+                    description?: string | null
+                    id?: string
+                    name: string
+                    prompt_count?: number | null
+                    screenshot_url?: string | null
+                    status?: string | null
+                    tags?: string[] | null
+                    updated_at?: string
+                    user_id: string
+                }
+                Update: {
+                    code_type?: string | null
+                    created_at?: string
+                    description?: string | null
+                    id?: string
+                    name?: string
+                    prompt_count?: number | null
+                    screenshot_url?: string | null
+                    status?: string | null
+                    tags?: string[] | null
+                    updated_at?: string
+                    user_id?: string
+                }
+                Relationships: [
+                    {
+                        foreignKeyName: "projects_user_id_fkey"
+                        columns: ["user_id"]
+                        isOneToOne: false
+                        referencedRelation: "user_profiles"
+                        referencedColumns: ["id"]
+                    },
+                ]
+            }
+            prompts: {
+                Row: {
+                    ai_model: string | null
+                    content: string
+                    created_at: string
+                    generated_code_url: string | null
+                    id: string
+                    project_id: string
+                    status: string | null
+                    user_id: string
+                }
+                Insert: {
+                    ai_model?: string | null
+                    content: string
+                    created_at?: string
+                    generated_code_url?: string | null
+                    id?: string
+                    project_id: string
+                    status?: string | null
+                    user_id: string
+                }
+                Update: {
+                    ai_model?: string | null
+                    content?: string
+                    created_at?: string
+                    generated_code_url?: string | null
+                    id?: string
+                    project_id?: string
+                    status?: string | null
+                    user_id?: string
+                }
+                Relationships: [
+                    {
+                        foreignKeyName: "prompts_project_id_fkey"
+                        columns: ["project_id"]
+                        isOneToOne: false
+                        referencedRelation: "projects"
+                        referencedColumns: ["id"]
+                    },
+                    {
+                        foreignKeyName: "prompts_user_id_fkey"
+                        columns: ["user_id"]
+                        isOneToOne: false
+                        referencedRelation: "user_profiles"
+                        referencedColumns: ["id"]
+                    },
+                ]
+            }
             subscriptions: {
                 Row: {
                     cancel_at: string | null
@@ -194,6 +350,97 @@ export type Database = {
                     },
                 ]
             }
+            usage_logs: {
+                Row: {
+                    action: string
+                    created_at: string
+                    id: string
+                    metadata: Json | null
+                    project_id: string | null
+                    prompt_id: string | null
+                    user_id: string
+                }
+                Insert: {
+                    action: string
+                    created_at?: string
+                    id?: string
+                    metadata?: Json | null
+                    project_id?: string | null
+                    prompt_id?: string | null
+                    user_id: string
+                }
+                Update: {
+                    action?: string
+                    created_at?: string
+                    id?: string
+                    metadata?: Json | null
+                    project_id?: string | null
+                    prompt_id?: string | null
+                    user_id?: string
+                }
+                Relationships: [
+                    {
+                        foreignKeyName: "usage_logs_project_id_fkey"
+                        columns: ["project_id"]
+                        isOneToOne: false
+                        referencedRelation: "projects"
+                        referencedColumns: ["id"]
+                    },
+                    {
+                        foreignKeyName: "usage_logs_prompt_id_fkey"
+                        columns: ["prompt_id"]
+                        isOneToOne: false
+                        referencedRelation: "prompts"
+                        referencedColumns: ["id"]
+                    },
+                    {
+                        foreignKeyName: "usage_logs_user_id_fkey"
+                        columns: ["user_id"]
+                        isOneToOne: false
+                        referencedRelation: "user_profiles"
+                        referencedColumns: ["id"]
+                    },
+                ]
+            }
+            user_profiles: {
+                Row: {
+                    avatar_url: string | null
+                    created_at: string
+                    email: string
+                    first_name: string | null
+                    id: string
+                    last_name: string | null
+                    prompt_quota: number | null
+                    prompts_used: number | null
+                    role: string | null
+                    updated_at: string
+                }
+                Insert: {
+                    avatar_url?: string | null
+                    created_at?: string
+                    email: string
+                    first_name?: string | null
+                    id: string
+                    last_name?: string | null
+                    prompt_quota?: number | null
+                    prompts_used?: number | null
+                    role?: string | null
+                    updated_at?: string
+                }
+                Update: {
+                    avatar_url?: string | null
+                    created_at?: string
+                    email?: string
+                    first_name?: string | null
+                    id?: string
+                    last_name?: string | null
+                    prompt_quota?: number | null
+                    prompts_used?: number | null
+                    role?: string | null
+                    updated_at?: string
+                }
+                Relationships: []
+            }
         }
         Views: {
             [_ in never]: never
@@ -202,6 +449,16 @@ export type Database = {
             requesting_user_id: {
                 Args: Record<PropertyKey, never>
                 Returns: string
+            }
+            reset_monthly_quotas: {
+                Args: Record<PropertyKey, never>
+                Returns: undefined
+            }
+            use_prompt_quota: {
+                Args: {
+                    p_user_id: string
+                }
+                Returns: boolean
             }
         }
         Enums: {
@@ -319,4 +576,3 @@ export type CompositeTypes<
     : PublicCompositeTypeNameOrOptions extends keyof PublicSchema["CompositeTypes"]
     ? PublicSchema["CompositeTypes"][PublicCompositeTypeNameOrOptions]
     : never
-
