@@ -69,8 +69,3 @@ Update this rule if user requested changes to the project requirement, etc.
 5.  Add an E2E test `/tests/e2e/projectFlow.test.ts` covering the user flow: upload, generate prompt, scaffold, preview, download (Q&A: Pre-Launch Checklist).
 6.  Add an E2E test `/tests/e2e/adminFlow.test.ts` covering the admin portal’s user and subscription management actions (App Flow Step 9).
 7.  Final validation: Run `npm run lint` in both `/frontend` and `/backend`, run all unit tests with `npm test`, and confirm 100% coverage for critical modules (Q&A: Pre-Launch Checklist).
-
-4.  Create a scheduled job `/backend/src/jobs/resetUsage.ts` that runs monthly (using Vercel Cron) to reset `prompt_usage` counts for all users (Subscription Quotas).
-5.  Add an E2E test `/tests/e2e/projectFlow.test.ts` covering the user flow: upload, generate prompt, scaffold, preview, download (Q&A: Pre-Launch Checklist).
-6.  Add an E2E test `/tests/e2e/adminFlow.test.ts` covering the admin portal’s user and subscription management actions (App Flow Step 9).
-7.  Final validation: Run `npm run lint` in both `/frontend` and `/backend`, run all unit tests with `npm test`, and confirm 100% coverage for critical modules (Q&A: Pre-Launch Checklist).
