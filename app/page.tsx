@@ -6,6 +6,8 @@ import Hero from '../components/landing/Hero'
 import Features from '../components/landing/Features'
 import CTA from '../components/landing/CTA'
 
+
+
 export default async function Home() {
   const { userId } = await auth()
 
@@ -23,10 +25,10 @@ export default async function Home() {
           height="100%"
         />
       </div>
-
       <Navbar />
       <Hero />
       <Features />
+     
       <CTA />
     </div>
   )
