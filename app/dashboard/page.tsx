@@ -1,6 +1,7 @@
 import { auth, currentUser } from '@clerk/nextjs/server'
 import { UserButton } from '@clerk/nextjs'
 import { redirect } from 'next/navigation'
+import { ensureUserProfile } from '@/utils/supabase/user-profile'
 
 export default async function DashboardPage() {
   const { userId } = await auth()
@@ -9,6 +10,9 @@ export default async function DashboardPage() {
   if (!userId) {
     redirect('/sign-in')
   }
+
+  // Ensure user profile exists and get current data
+  const userProfile = await ensureUserProfile()
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -53,11 +57,15 @@ export default async function DashboardPage() {
               <div className="text-sm text-gray-600">Projects</div>
             </div>
             <div className="text-center">
-              <div className="text-2xl font-bold text-green-600">15</div>
+              <div className="text-2xl font-bold text-green-600">
+                {userProfile ? ((userProfile.prompt_quota ?? 15) - (userProfile.prompts_used ?? 0)) : 15}
+              </div>
               <div className="text-sm text-gray-600">Prompts Remaining</div>
             </div>
             <div className="text-center">
-              <div className="text-2xl font-bold text-purple-600">Starter</div>
+              <div className="text-2xl font-bold text-purple-600">
+                {userProfile?.role === 'admin' ? 'Admin' : 'Starter'}
+              </div>
               <div className="text-sm text-gray-600">Current Plan</div>
             </div>
           </div>
