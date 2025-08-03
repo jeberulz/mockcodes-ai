@@ -1,19 +1,12 @@
 import { auth } from '@clerk/nextjs/server'
-import { redirect } from 'next/navigation'
 
 import Navbar from '../components/landing/Navbar'
 import Hero from '../components/landing/Hero'
 import Features from '../components/landing/Features'
 import CTA from '../components/landing/CTA'
 
-
-
 export default async function Home() {
   const { userId } = await auth()
-
-  if (userId) {
-    redirect('/dashboard')
-  }
 
   return (
     <div className="min-h-screen bg-slate-950 text-white overflow-x-hidden">
@@ -25,11 +18,10 @@ export default async function Home() {
           height="100%"
         />
       </div>
-      <Navbar />
-      <Hero />
+      <Navbar isSignedIn={!!userId} />
+      <Hero isSignedIn={!!userId} />
       <Features />
-     
-      <CTA />
+      <CTA isSignedIn={!!userId} />
     </div>
   )
 }

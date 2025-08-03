@@ -1,9 +1,14 @@
 'use client'
 
 import Link from 'next/link'
-import { Menu, LogIn } from 'lucide-react'
+import { Menu, LogIn, LayoutDashboard } from 'lucide-react'
+import { UserButton } from '@clerk/nextjs'
 
-export default function Navbar() {
+interface NavbarProps {
+  isSignedIn?: boolean
+}
+
+export default function Navbar({ isSignedIn = false }: NavbarProps) {
   return (
     <header className="container mx-auto px-4 sm:px-6 py-6 flex items-center justify-between">
       <Link href="/" className="flex items-center gap-3 group">
@@ -23,12 +28,32 @@ export default function Navbar() {
         <Link href="#" className="text-sm px-4 py-2 rounded-3xl hover:bg-white/10 transition tracking-tight">Features</Link>
         <Link href="#" className="text-sm px-4 py-2 rounded-3xl hover:bg-white/10 transition tracking-tight">Pricing</Link>
         <Link href="#" className="text-sm px-4 py-2 rounded-3xl hover:bg-white/10 transition tracking-tight">Docs</Link>
-        <Link href="/sign-up" className="inline-flex items-center gap-2 rounded-3xl border border-white/30 px-4 py-2.5 text-sm font-medium text-white hover:bg-white/10 transition tracking-tight">
-          Create Account
-        </Link>
-        <Link href="/sign-in" className="inline-flex items-center gap-2 rounded-3xl bg-gradient-to-r from-orange-500 to-pink-600 px-4 py-2.5 text-sm font-medium shadow-lg hover:from-orange-400 hover:to-pink-500 transition tracking-tight">
-          <LogIn className="w-4 h-4" /> Sign in
-        </Link>
+        
+        {isSignedIn ? (
+          <>
+            <Link href="/dashboard" className="inline-flex items-center gap-2 rounded-3xl bg-gradient-to-r from-orange-500 to-pink-600 px-4 py-2.5 text-sm font-medium shadow-lg hover:from-orange-400 hover:to-pink-500 transition tracking-tight">
+              <LayoutDashboard className="w-4 h-4" /> Dashboard
+            </Link>
+            <div className="ml-2">
+              <UserButton 
+                appearance={{
+                  elements: {
+                    avatarBox: "w-10 h-10 ring-2 ring-white/20 hover:ring-white/40 transition-all",
+                  }
+                }}
+              />
+            </div>
+          </>
+        ) : (
+          <>
+            <Link href="/sign-up" className="inline-flex items-center gap-2 rounded-3xl border border-white/30 px-4 py-2.5 text-sm font-medium text-white hover:bg-white/10 transition tracking-tight">
+              Create Account
+            </Link>
+            <Link href="/sign-in" className="inline-flex items-center gap-2 rounded-3xl bg-gradient-to-r from-orange-500 to-pink-600 px-4 py-2.5 text-sm font-medium shadow-lg hover:from-orange-400 hover:to-pink-500 transition tracking-tight">
+              <LogIn className="w-4 h-4" /> Sign in
+            </Link>
+          </>
+        )}
       </div>
 
       <button className="md:hidden w-10 h-10 flex items-center justify-center rounded-3xl border border-white/15 hover:bg-white/10">
