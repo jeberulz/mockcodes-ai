@@ -124,9 +124,9 @@ export default function UploadComponent({
       if (onUploadComplete && data.imageUrl) {
         onUploadComplete(data.imageUrl)
       } else {
-        // Navigate to preview page with the project ID
+        // Navigate to project analysis page with the project ID
         if (data.projectId) {
-          router.push(`/projects/${data.projectId}/preview`)
+          router.push(`/project/${data.projectId}`)
         } else {
           // Fallback to dashboard if no project ID returned
           router.push('/dashboard')

@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { auth } from '@clerk/nextjs/server'
-import { createClerkSupabaseClientSsr } from '@/utils/supabase/server'
+import { createClient } from '@supabase/supabase-js'
 import { createHash } from 'crypto'
 
 const MAX_FILE_SIZE = 5 * 1024 * 1024 // 5MB
@@ -41,8 +41,11 @@ export async function POST(request: NextRequest) {
       }, { status: 400 })
     }
 
-    // Initialize Supabase client
-    const supabase = await createClerkSupabaseClientSsr()
+    // Initialize Supabase client with service role for file uploads
+    const supabase = createClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.SUPABASE_SERVICE_ROLE_KEY!
+    )
 
     // Generate unique filename with validation
     const timestamp = Date.now()
@@ -80,7 +83,7 @@ export async function POST(request: NextRequest) {
 
     // Upload to Supabase Storage
     const { data: uploadData, error: uploadError } = await supabase.storage
-      .from('artifacts')
+      .from('screenshots')
       .upload(fileName, fileBuffer, {
         contentType: file.type,
         cacheControl: '3600',
@@ -94,15 +97,43 @@ export async function POST(request: NextRequest) {
       }, { status: 500 })
     }
 
-    // Get public URL
-    const { data: urlData } = supabase.storage
-      .from('artifacts')
-      .getPublicUrl(fileName)
+    // Get signed URL (since bucket is private)
+    const { data: urlData, error: urlError } = await supabase.storage
+      .from('screenshots')
+      .createSignedUrl(fileName, 3600) // 1 hour expiry
 
-    if (!urlData.publicUrl) {
+    if (urlError || !urlData.signedUrl) {
+      console.error('Failed to get signed URL:', urlError)
       return NextResponse.json({ 
         error: 'Failed to get file URL' 
       }, { status: 500 })
+    }
+
+    // Ensure user profile exists first
+    const { data: existingProfile } = await supabase
+      .from('user_profiles')
+      .select('id')
+      .eq('id', userId)
+      .single()
+
+    if (!existingProfile) {
+      // Create user profile if it doesn't exist
+      const { error: profileError } = await supabase
+        .from('user_profiles')
+        .insert([
+          {
+            id: userId,
+            email: '', // Will be updated by webhook
+            role: 'user',
+            prompt_quota: 15,
+            prompts_used: 0,
+            created_at: new Date().toISOString()
+          }
+        ])
+
+      if (profileError) {
+        console.error('Failed to create user profile:', profileError)
+      }
     }
 
     // Create project record in database
@@ -112,8 +143,10 @@ export async function POST(request: NextRequest) {
         {
           user_id: userId,
           name: `Screenshot ${new Date().toISOString().split('T')[0]}`,
-          screenshot_url: urlData.publicUrl,
-          status: 'active'
+          screenshot_url: urlData.signedUrl,
+          status: 'active',
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString()
         }
       ])
       .select()
@@ -126,7 +159,7 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({
       success: true,
-      imageUrl: urlData.publicUrl,
+      imageUrl: urlData.signedUrl,
       projectId: projectData?.id,
       fileName: fileName
     })

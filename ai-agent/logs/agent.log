@@ -1,0 +1,250 @@
+2025-08-03 06:19:02,841 - main - INFO - Initializing AI Agent services...
+2025-08-03 06:19:02,885 - services.code_generator - INFO - OpenAI client initialized
+2025-08-03 06:19:02,885 - services.artifact_manager - INFO - Artifact manager initialized
+2025-08-03 06:19:02,885 - main - INFO - AI Agent started successfully
+2025-08-03 06:31:08,460 - main - INFO - Starting code generation for project 83326c95-4d15-4473-90f6-cdcd253df0a4
+2025-08-03 06:31:09,348 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 400 Bad Request"
+2025-08-03 06:31:09,351 - services.code_generator - ERROR - Code generation failed: Error code: 400 - {'error': {'message': 'Error while downloading http://127.0.0.1:54321/storage/v1/object/sign/screenshots/screenshots/ec1c8a58d1b1/1754202621283.png?token=eyJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJzY3JlZW5zaG90cy9zY3JlZW5zaG90cy9lYzFjOGE1OGQxYjEvMTc1NDIwMjYyMTI4My5wbmciLCJpYXQiOjE3NTQyMDI2MjIsImV4cCI6MTc1NDIwNjIyMn0.0zJnGSHgoJKz8Iz5H67_NoBGofWORoMjLL1fLz_0-cM.', 'type': 'invalid_request_error', 'param': None, 'code': 'invalid_image_url'}}
+2025-08-03 06:31:09,351 - main - ERROR - Code generation failed: Error code: 400 - {'error': {'message': 'Error while downloading http://127.0.0.1:54321/storage/v1/object/sign/screenshots/screenshots/ec1c8a58d1b1/1754202621283.png?token=eyJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJzY3JlZW5zaG90cy9zY3JlZW5zaG90cy9lYzFjOGE1OGQxYjEvMTc1NDIwMjYyMTI4My5wbmciLCJpYXQiOjE3NTQyMDI2MjIsImV4cCI6MTc1NDIwNjIyMn0.0zJnGSHgoJKz8Iz5H67_NoBGofWORoMjLL1fLz_0-cM.', 'type': 'invalid_request_error', 'param': None, 'code': 'invalid_image_url'}}
+2025-08-03 06:33:30,362 - main - INFO - Shutting down AI Agent services...
+2025-08-03 06:33:33,332 - main - INFO - Initializing AI Agent services...
+2025-08-03 06:33:33,373 - services.code_generator - INFO - OpenAI client initialized
+2025-08-03 06:33:33,373 - services.artifact_manager - INFO - Artifact manager initialized
+2025-08-03 06:33:33,373 - main - INFO - AI Agent started successfully
+2025-08-03 06:34:53,569 - main - INFO - Starting code generation for project 83326c95-4d15-4473-90f6-cdcd253df0a4
+2025-08-03 06:35:49,718 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-08-03 06:35:49,874 - httpx - INFO - HTTP Request: POST http://host.docker.internal:54321/rest/v1/artifacts "HTTP/1.1 400 Bad Request"
+2025-08-03 06:35:49,875 - services.artifact_manager - ERROR - Failed to create artifact: {"code":"PGRST204","details":null,"hint":null,"message":"Could not find the 'css_content' column of 'artifacts' in the schema cache"}
+2025-08-03 06:35:49,876 - main - ERROR - Code generation failed: Failed to create artifact: 400
+2025-08-03 06:38:38,324 - main - INFO - Shutting down AI Agent services...
+2025-08-03 06:38:40,862 - main - INFO - Initializing AI Agent services...
+2025-08-03 06:38:40,921 - services.code_generator - INFO - OpenAI client initialized
+2025-08-03 06:38:40,922 - services.artifact_manager - INFO - Artifact manager initialized
+2025-08-03 06:38:40,923 - main - INFO - AI Agent started successfully
+2025-08-03 06:41:24,826 - main - INFO - Starting code generation for project a0517d2f-7d59-4806-8677-30de36c70fd0
+2025-08-03 06:42:08,435 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-08-03 06:42:08,619 - httpx - INFO - HTTP Request: POST http://host.docker.internal:54321/rest/v1/artifacts "HTTP/1.1 400 Bad Request"
+2025-08-03 06:42:08,622 - services.artifact_manager - ERROR - Failed to create artifact: {"code":"PGRST204","details":null,"hint":null,"message":"Could not find the 'status' column of 'artifacts' in the schema cache"}
+2025-08-03 06:42:08,623 - main - ERROR - Code generation failed: Failed to create artifact: 400
+2025-08-03 06:46:11,372 - main - INFO - Starting code generation for project 284af039-dc03-4826-acc2-58977f32100a
+2025-08-03 06:46:55,859 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-08-03 06:46:56,505 - httpx - INFO - HTTP Request: POST http://host.docker.internal:54321/rest/v1/artifacts "HTTP/1.1 400 Bad Request"
+2025-08-03 06:46:56,508 - services.artifact_manager - ERROR - Failed to create artifact: {"code":"PGRST204","details":null,"hint":null,"message":"Could not find the 'status' column of 'artifacts' in the schema cache"}
+2025-08-03 06:46:56,509 - main - ERROR - Code generation failed: Failed to create artifact: 400
+2025-08-03 06:53:13,622 - main - INFO - Starting code generation for project 284af039-dc03-4826-acc2-58977f32100a
+2025-08-03 06:53:47,047 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-08-03 06:53:47,157 - httpx - INFO - HTTP Request: POST http://host.docker.internal:54321/rest/v1/artifacts "HTTP/1.1 400 Bad Request"
+2025-08-03 06:53:47,159 - services.artifact_manager - ERROR - Failed to create artifact: {"code":"PGRST204","details":null,"hint":null,"message":"Could not find the 'status' column of 'artifacts' in the schema cache"}
+2025-08-03 06:53:47,160 - main - ERROR - Code generation failed: Failed to create artifact: 400
+2025-08-03 07:09:38,013 - main - INFO - Shutting down AI Agent services...
+2025-08-03 07:09:40,229 - main - INFO - Initializing AI Agent services...
+2025-08-03 07:09:40,270 - services.code_generator - INFO - OpenAI client initialized
+2025-08-03 07:09:40,270 - services.artifact_manager - INFO - Artifact manager initialized
+2025-08-03 07:09:40,270 - main - INFO - AI Agent started successfully
+2025-08-03 07:15:57,543 - main - INFO - Starting code generation for project test-project-123
+2025-08-03 07:16:10,656 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-08-03 07:16:10,854 - httpx - INFO - HTTP Request: POST http://host.docker.internal:54321/rest/v1/artifacts "HTTP/1.1 400 Bad Request"
+2025-08-03 07:16:10,856 - services.artifact_manager - ERROR - Failed to create artifact: {"code":"22P02","details":null,"hint":null,"message":"invalid input syntax for type uuid: \"test-project-123\""}
+2025-08-03 07:16:10,857 - main - ERROR - Code generation failed: Failed to create artifact: 400
+2025-08-03 07:17:10,733 - main - INFO - Starting code generation for project 284af039-dc03-4826-acc2-58977f32100a
+2025-08-03 07:17:24,585 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-08-03 07:17:24,713 - httpx - INFO - HTTP Request: POST http://host.docker.internal:54321/rest/v1/artifacts "HTTP/1.1 400 Bad Request"
+2025-08-03 07:17:24,717 - services.artifact_manager - ERROR - Failed to create artifact: {"code":"23502","details":"Failing row contains (44a5e213-adb1-4c7b-b7a1-576a6c820fde, 284af039-dc03-4826-acc2-58977f32100a, null, null, preview, null, null, null, 2025-08-03 07:17:24.602554+00, <!DOCTYPE html>\n<html lang=\"en\">\n<head>\n    <meta charset=\"UTF-8..., , , <!DOCTYPE html>\n<html lang=\"en\">\n<head>\n    <meta charset=\"UTF-8..., /preview/44a5e213-adb1-4c7b-b7a1-576a6c820fde, completed).","hint":null,"message":"null value in column \"user_id\" of relation \"artifacts\" violates not-null constraint"}
+2025-08-03 07:17:24,718 - main - ERROR - Code generation failed: Failed to create artifact: 400
+2025-08-03 07:22:08,885 - main - INFO - Starting code generation for project 66d9efa7-f31a-484b-83c7-f61c6596ec01
+2025-08-03 07:22:33,505 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-08-03 07:22:33,747 - httpx - INFO - HTTP Request: POST http://host.docker.internal:54321/rest/v1/artifacts "HTTP/1.1 400 Bad Request"
+2025-08-03 07:22:33,750 - services.artifact_manager - ERROR - Failed to create artifact: {"code":"23502","details":"Failing row contains (88a00e31-25c2-49aa-b62e-3b9a4e4e773b, 66d9efa7-f31a-484b-83c7-f61c6596ec01, null, null, preview, null, null, null, 2025-08-03 07:22:33.559709+00, <!DOCTYPE html>\n<html lang=\"en\">\n<head>\n    <meta charset=\"UTF-8..., , , <!DOCTYPE html>\n<html lang=\"en\">\n<head>\n    <meta charset=\"UTF-8..., /preview/88a00e31-25c2-49aa-b62e-3b9a4e4e773b, completed).","hint":null,"message":"null value in column \"user_id\" of relation \"artifacts\" violates not-null constraint"}
+2025-08-03 07:22:33,752 - main - ERROR - Code generation failed: Failed to create artifact: 400
+2025-08-03 07:41:46,014 - main - INFO - Starting code generation for project c67f50fe-6446-433a-ad0a-24623332bf83
+2025-08-03 07:42:15,992 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-08-03 07:42:16,187 - httpx - INFO - HTTP Request: POST http://host.docker.internal:54321/rest/v1/artifacts "HTTP/1.1 400 Bad Request"
+2025-08-03 07:42:16,191 - services.artifact_manager - ERROR - Failed to create artifact: {"code":"23502","details":"Failing row contains (d0652de6-6a24-4f70-9cb1-2bbd979a31cc, c67f50fe-6446-433a-ad0a-24623332bf83, null, null, preview, null, null, null, 2025-08-03 07:42:16.081831+00, <!DOCTYPE html>\n<html lang=\"en\">\n<head>\n    <meta charset=\"UTF-8..., , , <!DOCTYPE html>\n<html lang=\"en\">\n<head>\n    <meta charset=\"UTF-8..., /preview/d0652de6-6a24-4f70-9cb1-2bbd979a31cc, completed).","hint":null,"message":"null value in column \"user_id\" of relation \"artifacts\" violates not-null constraint"}
+2025-08-03 07:42:16,192 - main - ERROR - Code generation failed: Failed to create artifact: 400
+2025-08-03 07:44:59,017 - main - INFO - Shutting down AI Agent services...
+2025-08-03 07:45:01,990 - main - INFO - Initializing AI Agent services...
+2025-08-03 07:45:02,020 - services.code_generator - INFO - OpenAI client initialized
+2025-08-03 07:45:02,021 - services.artifact_manager - INFO - Artifact manager initialized
+2025-08-03 07:45:02,021 - main - INFO - AI Agent started successfully
+2025-08-03 07:46:48,267 - main - INFO - Shutting down AI Agent services...
+2025-08-03 07:46:50,670 - main - INFO - Initializing AI Agent services...
+2025-08-03 07:46:50,717 - services.code_generator - INFO - OpenAI client initialized
+2025-08-03 07:46:50,717 - services.artifact_manager - INFO - Artifact manager initialized
+2025-08-03 07:46:50,717 - main - INFO - AI Agent started successfully
+2025-08-03 07:47:13,265 - main - INFO - Shutting down AI Agent services...
+2025-08-03 07:47:14,678 - main - INFO - Initializing AI Agent services...
+2025-08-03 07:47:14,706 - services.code_generator - INFO - OpenAI client initialized
+2025-08-03 07:47:14,707 - services.artifact_manager - INFO - Artifact manager initialized
+2025-08-03 07:47:14,707 - main - INFO - AI Agent started successfully
+2025-08-03 07:49:57,452 - main - INFO - Starting code generation for project c67f50fe-6446-433a-ad0a-24623332bf83
+2025-08-03 07:50:24,236 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-08-03 07:50:25,373 - httpx - INFO - HTTP Request: POST http://host.docker.internal:54321/rest/v1/artifacts "HTTP/1.1 400 Bad Request"
+2025-08-03 07:50:25,375 - services.artifact_manager - ERROR - Failed to create artifact: {"code":"23502","details":"Failing row contains (2585fee7-629d-4fcf-9db7-a9e1ef9f9bde, c67f50fe-6446-433a-ad0a-24623332bf83, null, null, preview, null, null, null, 2025-08-03 07:50:24.290254+00, <!DOCTYPE html>\n<html lang=\"en\">\n<head>\n    <meta charset=\"UTF-8..., , , <!DOCTYPE html>\n<html lang=\"en\">\n<head>\n    <meta charset=\"UTF-8..., /preview/2585fee7-629d-4fcf-9db7-a9e1ef9f9bde, completed).","hint":null,"message":"null value in column \"user_id\" of relation \"artifacts\" violates not-null constraint"}
+2025-08-03 07:50:25,376 - main - ERROR - Code generation failed: Failed to create artifact: 400
+2025-08-03 07:52:47,494 - main - INFO - Shutting down AI Agent services...
+2025-08-03 07:52:51,153 - main - INFO - Initializing AI Agent services...
+2025-08-03 07:52:51,208 - services.code_generator - INFO - OpenAI client initialized
+2025-08-03 07:52:51,209 - services.artifact_manager - INFO - Artifact manager initialized
+2025-08-03 07:52:51,209 - main - INFO - AI Agent started successfully
+2025-08-03 07:53:20,153 - main - INFO - Starting code generation for project c67f50fe-6446-433a-ad0a-24623332bf83
+2025-08-03 07:53:20,920 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 404 Not Found"
+2025-08-03 07:53:20,923 - services.code_generator - WARNING - Model gpt-4o-preview unavailable (Error code: 404 - {'error': {'message': 'The model `gpt-4o-preview` does not exist or you do not have access to it.', 'type': 'invalid_request_error', 'param': None, 'code': 'model_not_found'}}). Falling back to gpt-4o-mini.
+2025-08-03 07:53:38,450 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-08-03 07:53:38,483 - services.artifact_manager - INFO - Looking up project details for c67f50fe-6446-433a-ad0a-24623332bf83
+2025-08-03 07:53:38,584 - httpx - INFO - HTTP Request: GET http://host.docker.internal:54321/rest/v1/projects?id=eq.c67f50fe-6446-433a-ad0a-24623332bf83&select=id%2Cuser_id%2Cname "HTTP/1.1 200 OK"
+2025-08-03 07:53:38,588 - services.artifact_manager - INFO - Project lookup response: 200 - [{"id":"c67f50fe-6446-433a-ad0a-24623332bf83","user_id":"user_30ldVcIFSxgNTvcuP0CL48ttRWK","name":"Screenshot 2025-08-03"}]
+2025-08-03 07:53:38,588 - services.artifact_manager - INFO - Found project data: {'id': 'c67f50fe-6446-433a-ad0a-24623332bf83', 'user_id': 'user_30ldVcIFSxgNTvcuP0CL48ttRWK', 'name': 'Screenshot 2025-08-03'}
+2025-08-03 07:53:38,588 - services.artifact_manager - INFO - Retrieved project_data: {'id': 'c67f50fe-6446-433a-ad0a-24623332bf83', 'user_id': 'user_30ldVcIFSxgNTvcuP0CL48ttRWK', 'name': 'Screenshot 2025-08-03'}
+2025-08-03 07:53:38,589 - services.artifact_manager - INFO - Extracted user_id: user_30ldVcIFSxgNTvcuP0CL48ttRWK
+2025-08-03 07:53:38,663 - httpx - INFO - HTTP Request: POST http://host.docker.internal:54321/rest/v1/artifacts "HTTP/1.1 201 Created"
+2025-08-03 07:53:38,669 - services.artifact_manager - INFO - Created artifact 03305599-5b0e-45ee-a189-92e1572c1382 for project c67f50fe-6446-433a-ad0a-24623332bf83
+2025-08-03 07:53:38,669 - main - INFO - Code generation completed for project c67f50fe-6446-433a-ad0a-24623332bf83
+2025-08-03 07:54:15,706 - main - INFO - Starting code generation for project c67f50fe-6446-433a-ad0a-24623332bf83
+2025-08-03 07:54:16,277 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 404 Not Found"
+2025-08-03 07:54:16,283 - services.code_generator - WARNING - Model gpt-4o-preview unavailable (Error code: 404 - {'error': {'message': 'The model `gpt-4o-preview` does not exist or you do not have access to it.', 'type': 'invalid_request_error', 'param': None, 'code': 'model_not_found'}}). Falling back to gpt-4o-mini.
+2025-08-03 07:54:38,759 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-08-03 07:54:38,797 - services.artifact_manager - INFO - Looking up project details for c67f50fe-6446-433a-ad0a-24623332bf83
+2025-08-03 07:54:38,884 - httpx - INFO - HTTP Request: GET http://host.docker.internal:54321/rest/v1/projects?id=eq.c67f50fe-6446-433a-ad0a-24623332bf83&select=id%2Cuser_id%2Cname "HTTP/1.1 200 OK"
+2025-08-03 07:54:38,885 - services.artifact_manager - INFO - Project lookup response: 200 - [{"id":"c67f50fe-6446-433a-ad0a-24623332bf83","user_id":"user_30ldVcIFSxgNTvcuP0CL48ttRWK","name":"Screenshot 2025-08-03"}]
+2025-08-03 07:54:38,885 - services.artifact_manager - INFO - Found project data: {'id': 'c67f50fe-6446-433a-ad0a-24623332bf83', 'user_id': 'user_30ldVcIFSxgNTvcuP0CL48ttRWK', 'name': 'Screenshot 2025-08-03'}
+2025-08-03 07:54:38,886 - services.artifact_manager - INFO - Retrieved project_data: {'id': 'c67f50fe-6446-433a-ad0a-24623332bf83', 'user_id': 'user_30ldVcIFSxgNTvcuP0CL48ttRWK', 'name': 'Screenshot 2025-08-03'}
+2025-08-03 07:54:38,886 - services.artifact_manager - INFO - Extracted user_id: user_30ldVcIFSxgNTvcuP0CL48ttRWK
+2025-08-03 07:54:38,947 - httpx - INFO - HTTP Request: POST http://host.docker.internal:54321/rest/v1/artifacts "HTTP/1.1 201 Created"
+2025-08-03 07:54:38,948 - services.artifact_manager - INFO - Created artifact 2371d8f3-788a-4462-839f-6c4d543d4302 for project c67f50fe-6446-433a-ad0a-24623332bf83
+2025-08-03 07:54:38,949 - main - INFO - Code generation completed for project c67f50fe-6446-433a-ad0a-24623332bf83
+2025-08-03 07:55:58,617 - main - INFO - Starting code generation for project c67f50fe-6446-433a-ad0a-24623332bf83
+2025-08-03 07:55:59,358 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 404 Not Found"
+2025-08-03 07:55:59,363 - services.code_generator - WARNING - Model gpt-4o-preview unavailable (Error code: 404 - {'error': {'message': 'The model `gpt-4o-preview` does not exist or you do not have access to it.', 'type': 'invalid_request_error', 'param': None, 'code': 'model_not_found'}}). Falling back to gpt-4o-mini.
+2025-08-03 07:56:23,516 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-08-03 07:56:23,556 - services.artifact_manager - INFO - Looking up project details for c67f50fe-6446-433a-ad0a-24623332bf83
+2025-08-03 07:56:23,641 - httpx - INFO - HTTP Request: GET http://host.docker.internal:54321/rest/v1/projects?id=eq.c67f50fe-6446-433a-ad0a-24623332bf83&select=id%2Cuser_id%2Cname "HTTP/1.1 200 OK"
+2025-08-03 07:56:23,642 - services.artifact_manager - INFO - Project lookup response: 200 - [{"id":"c67f50fe-6446-433a-ad0a-24623332bf83","user_id":"user_30ldVcIFSxgNTvcuP0CL48ttRWK","name":"Screenshot 2025-08-03"}]
+2025-08-03 07:56:23,643 - services.artifact_manager - INFO - Found project data: {'id': 'c67f50fe-6446-433a-ad0a-24623332bf83', 'user_id': 'user_30ldVcIFSxgNTvcuP0CL48ttRWK', 'name': 'Screenshot 2025-08-03'}
+2025-08-03 07:56:23,644 - services.artifact_manager - INFO - Retrieved project_data: {'id': 'c67f50fe-6446-433a-ad0a-24623332bf83', 'user_id': 'user_30ldVcIFSxgNTvcuP0CL48ttRWK', 'name': 'Screenshot 2025-08-03'}
+2025-08-03 07:56:23,646 - services.artifact_manager - INFO - Extracted user_id: user_30ldVcIFSxgNTvcuP0CL48ttRWK
+2025-08-03 07:56:23,695 - httpx - INFO - HTTP Request: POST http://host.docker.internal:54321/rest/v1/artifacts "HTTP/1.1 201 Created"
+2025-08-03 07:56:23,696 - services.artifact_manager - INFO - Created artifact 14411abc-8023-4ab2-a15e-2eb733a04126 for project c67f50fe-6446-433a-ad0a-24623332bf83
+2025-08-03 07:56:23,696 - main - INFO - Code generation completed for project c67f50fe-6446-433a-ad0a-24623332bf83
+2025-08-03 07:59:45,057 - main - INFO - Starting code generation for project c67f50fe-6446-433a-ad0a-24623332bf83
+2025-08-03 07:59:45,734 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 404 Not Found"
+2025-08-03 07:59:45,742 - services.code_generator - WARNING - Model gpt-4o-preview unavailable (Error code: 404 - {'error': {'message': 'The model `gpt-4o-preview` does not exist or you do not have access to it.', 'type': 'invalid_request_error', 'param': None, 'code': 'model_not_found'}}). Falling back to gpt-4o-mini.
+2025-08-03 08:01:46,885 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-08-03 08:01:46,929 - services.code_generator - ERROR - Code generation failed: Unterminated string starting at: line 2 column 11 (char 12)
+2025-08-03 08:01:46,930 - main - ERROR - Code generation failed: Unterminated string starting at: line 2 column 11 (char 12)
+2025-08-03 08:03:52,460 - main - INFO - Shutting down AI Agent services...
+2025-08-03 08:03:55,118 - main - INFO - Initializing AI Agent services...
+2025-08-03 08:03:55,149 - services.code_generator - INFO - OpenAI client initialized
+2025-08-03 08:03:55,149 - services.artifact_manager - INFO - Artifact manager initialized
+2025-08-03 08:03:55,149 - main - INFO - AI Agent started successfully
+2025-08-03 08:04:19,392 - main - INFO - Starting code generation for project c67f50fe-6446-433a-ad0a-24623332bf83
+2025-08-03 08:04:20,182 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 404 Not Found"
+2025-08-03 08:04:20,185 - services.code_generator - WARNING - Model gpt-4o-preview unavailable (Error code: 404 - {'error': {'message': 'The model `gpt-4o-preview` does not exist or you do not have access to it.', 'type': 'invalid_request_error', 'param': None, 'code': 'model_not_found'}}). Falling back to gpt-4o-mini.
+2025-08-03 08:04:53,258 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-08-03 08:04:53,287 - services.code_generator - INFO - OpenAI response length: 4810
+2025-08-03 08:04:53,291 - services.artifact_manager - INFO - Looking up project details for c67f50fe-6446-433a-ad0a-24623332bf83
+2025-08-03 08:04:53,422 - httpx - INFO - HTTP Request: GET http://host.docker.internal:54321/rest/v1/projects?id=eq.c67f50fe-6446-433a-ad0a-24623332bf83&select=id%2Cuser_id%2Cname "HTTP/1.1 200 OK"
+2025-08-03 08:04:53,424 - services.artifact_manager - INFO - Project lookup response: 200 - [{"id":"c67f50fe-6446-433a-ad0a-24623332bf83","user_id":"user_30ldVcIFSxgNTvcuP0CL48ttRWK","name":"Screenshot 2025-08-03"}]
+2025-08-03 08:04:53,424 - services.artifact_manager - INFO - Found project data: {'id': 'c67f50fe-6446-433a-ad0a-24623332bf83', 'user_id': 'user_30ldVcIFSxgNTvcuP0CL48ttRWK', 'name': 'Screenshot 2025-08-03'}
+2025-08-03 08:04:53,425 - services.artifact_manager - INFO - Retrieved project_data: {'id': 'c67f50fe-6446-433a-ad0a-24623332bf83', 'user_id': 'user_30ldVcIFSxgNTvcuP0CL48ttRWK', 'name': 'Screenshot 2025-08-03'}
+2025-08-03 08:04:53,426 - services.artifact_manager - INFO - Extracted user_id: user_30ldVcIFSxgNTvcuP0CL48ttRWK
+2025-08-03 08:04:53,501 - httpx - INFO - HTTP Request: POST http://host.docker.internal:54321/rest/v1/artifacts "HTTP/1.1 201 Created"
+2025-08-03 08:04:53,509 - services.artifact_manager - INFO - Created artifact 957d4bb5-7d05-4b0c-8dd6-ad475714403e for project c67f50fe-6446-433a-ad0a-24623332bf83
+2025-08-03 08:04:53,509 - main - INFO - Code generation completed for project c67f50fe-6446-433a-ad0a-24623332bf83
+2025-08-03 08:08:05,960 - main - INFO - Starting code generation for project c67f50fe-6446-433a-ad0a-24623332bf83
+2025-08-03 08:08:06,593 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 404 Not Found"
+2025-08-03 08:08:06,599 - services.code_generator - WARNING - Model gpt-4o-preview unavailable (Error code: 404 - {'error': {'message': 'The model `gpt-4o-preview` does not exist or you do not have access to it.', 'type': 'invalid_request_error', 'param': None, 'code': 'model_not_found'}}). Falling back to gpt-4o-mini.
+2025-08-03 08:08:34,562 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-08-03 08:08:34,585 - services.code_generator - INFO - OpenAI response length: 4276
+2025-08-03 08:08:34,585 - services.artifact_manager - INFO - Looking up project details for c67f50fe-6446-433a-ad0a-24623332bf83
+2025-08-03 08:08:34,696 - httpx - INFO - HTTP Request: GET http://host.docker.internal:54321/rest/v1/projects?id=eq.c67f50fe-6446-433a-ad0a-24623332bf83&select=id%2Cuser_id%2Cname "HTTP/1.1 200 OK"
+2025-08-03 08:08:34,697 - services.artifact_manager - INFO - Project lookup response: 200 - [{"id":"c67f50fe-6446-433a-ad0a-24623332bf83","user_id":"user_30ldVcIFSxgNTvcuP0CL48ttRWK","name":"Screenshot 2025-08-03"}]
+2025-08-03 08:08:34,698 - services.artifact_manager - INFO - Found project data: {'id': 'c67f50fe-6446-433a-ad0a-24623332bf83', 'user_id': 'user_30ldVcIFSxgNTvcuP0CL48ttRWK', 'name': 'Screenshot 2025-08-03'}
+2025-08-03 08:08:34,698 - services.artifact_manager - INFO - Retrieved project_data: {'id': 'c67f50fe-6446-433a-ad0a-24623332bf83', 'user_id': 'user_30ldVcIFSxgNTvcuP0CL48ttRWK', 'name': 'Screenshot 2025-08-03'}
+2025-08-03 08:08:34,699 - services.artifact_manager - INFO - Extracted user_id: user_30ldVcIFSxgNTvcuP0CL48ttRWK
+2025-08-03 08:08:34,759 - httpx - INFO - HTTP Request: POST http://host.docker.internal:54321/rest/v1/artifacts "HTTP/1.1 201 Created"
+2025-08-03 08:08:34,760 - services.artifact_manager - INFO - Created artifact 1da95347-df0c-41be-949d-c90d451d747e for project c67f50fe-6446-433a-ad0a-24623332bf83
+2025-08-03 08:08:34,760 - main - INFO - Code generation completed for project c67f50fe-6446-433a-ad0a-24623332bf83
+2025-08-03 08:10:17,973 - main - INFO - Starting code generation for project c67f50fe-6446-433a-ad0a-24623332bf83
+2025-08-03 08:10:18,695 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 404 Not Found"
+2025-08-03 08:10:18,699 - services.code_generator - WARNING - Model gpt-4o-preview unavailable (Error code: 404 - {'error': {'message': 'The model `gpt-4o-preview` does not exist or you do not have access to it.', 'type': 'invalid_request_error', 'param': None, 'code': 'model_not_found'}}). Falling back to gpt-4o-mini.
+2025-08-03 08:10:49,719 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-08-03 08:10:49,750 - services.code_generator - INFO - OpenAI response length: 4278
+2025-08-03 08:10:49,752 - services.artifact_manager - INFO - Looking up project details for c67f50fe-6446-433a-ad0a-24623332bf83
+2025-08-03 08:10:49,884 - httpx - INFO - HTTP Request: GET http://host.docker.internal:54321/rest/v1/projects?id=eq.c67f50fe-6446-433a-ad0a-24623332bf83&select=id%2Cuser_id%2Cname "HTTP/1.1 200 OK"
+2025-08-03 08:10:49,886 - services.artifact_manager - INFO - Project lookup response: 200 - [{"id":"c67f50fe-6446-433a-ad0a-24623332bf83","user_id":"user_30ldVcIFSxgNTvcuP0CL48ttRWK","name":"Screenshot 2025-08-03"}]
+2025-08-03 08:10:49,886 - services.artifact_manager - INFO - Found project data: {'id': 'c67f50fe-6446-433a-ad0a-24623332bf83', 'user_id': 'user_30ldVcIFSxgNTvcuP0CL48ttRWK', 'name': 'Screenshot 2025-08-03'}
+2025-08-03 08:10:49,887 - services.artifact_manager - INFO - Retrieved project_data: {'id': 'c67f50fe-6446-433a-ad0a-24623332bf83', 'user_id': 'user_30ldVcIFSxgNTvcuP0CL48ttRWK', 'name': 'Screenshot 2025-08-03'}
+2025-08-03 08:10:49,888 - services.artifact_manager - INFO - Extracted user_id: user_30ldVcIFSxgNTvcuP0CL48ttRWK
+2025-08-03 08:10:49,953 - httpx - INFO - HTTP Request: POST http://host.docker.internal:54321/rest/v1/artifacts "HTTP/1.1 201 Created"
+2025-08-03 08:10:49,954 - services.artifact_manager - INFO - Created artifact 39ef514b-660e-47c9-84dc-a2392a781ea8 for project c67f50fe-6446-433a-ad0a-24623332bf83
+2025-08-03 08:10:49,954 - main - INFO - Code generation completed for project c67f50fe-6446-433a-ad0a-24623332bf83
+2025-08-03 08:13:19,785 - main - INFO - Starting code generation for project c67f50fe-6446-433a-ad0a-24623332bf83
+2025-08-03 08:13:20,363 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 404 Not Found"
+2025-08-03 08:13:20,370 - services.code_generator - WARNING - Model gpt-4o-preview unavailable (Error code: 404 - {'error': {'message': 'The model `gpt-4o-preview` does not exist or you do not have access to it.', 'type': 'invalid_request_error', 'param': None, 'code': 'model_not_found'}}). Falling back to gpt-4o-mini.
+2025-08-03 08:13:44,999 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-08-03 08:13:45,050 - services.code_generator - INFO - OpenAI response length: 3864
+2025-08-03 08:13:45,052 - services.artifact_manager - INFO - Looking up project details for c67f50fe-6446-433a-ad0a-24623332bf83
+2025-08-03 08:13:45,166 - httpx - INFO - HTTP Request: GET http://host.docker.internal:54321/rest/v1/projects?id=eq.c67f50fe-6446-433a-ad0a-24623332bf83&select=id%2Cuser_id%2Cname "HTTP/1.1 200 OK"
+2025-08-03 08:13:45,167 - services.artifact_manager - INFO - Project lookup response: 200 - [{"id":"c67f50fe-6446-433a-ad0a-24623332bf83","user_id":"user_30ldVcIFSxgNTvcuP0CL48ttRWK","name":"Screenshot 2025-08-03"}]
+2025-08-03 08:13:45,168 - services.artifact_manager - INFO - Found project data: {'id': 'c67f50fe-6446-433a-ad0a-24623332bf83', 'user_id': 'user_30ldVcIFSxgNTvcuP0CL48ttRWK', 'name': 'Screenshot 2025-08-03'}
+2025-08-03 08:13:45,168 - services.artifact_manager - INFO - Retrieved project_data: {'id': 'c67f50fe-6446-433a-ad0a-24623332bf83', 'user_id': 'user_30ldVcIFSxgNTvcuP0CL48ttRWK', 'name': 'Screenshot 2025-08-03'}
+2025-08-03 08:13:45,169 - services.artifact_manager - INFO - Extracted user_id: user_30ldVcIFSxgNTvcuP0CL48ttRWK
+2025-08-03 08:13:45,227 - httpx - INFO - HTTP Request: POST http://host.docker.internal:54321/rest/v1/artifacts "HTTP/1.1 201 Created"
+2025-08-03 08:13:45,228 - services.artifact_manager - INFO - Created artifact 7c133bba-bbd5-431d-bb34-8056ecd205c5 for project c67f50fe-6446-433a-ad0a-24623332bf83
+2025-08-03 08:13:45,228 - main - INFO - Code generation completed for project c67f50fe-6446-433a-ad0a-24623332bf83
+2025-08-03 08:16:59,348 - main - INFO - Starting code generation for project c67f50fe-6446-433a-ad0a-24623332bf83
+2025-08-03 08:17:00,255 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 404 Not Found"
+2025-08-03 08:17:00,260 - services.code_generator - WARNING - Model gpt-4o-preview unavailable (Error code: 404 - {'error': {'message': 'The model `gpt-4o-preview` does not exist or you do not have access to it.', 'type': 'invalid_request_error', 'param': None, 'code': 'model_not_found'}}). Falling back to gpt-4o-mini.
+2025-08-03 08:17:30,909 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-08-03 08:17:30,958 - services.code_generator - INFO - OpenAI response length: 4871
+2025-08-03 08:17:30,960 - services.artifact_manager - INFO - Looking up project details for c67f50fe-6446-433a-ad0a-24623332bf83
+2025-08-03 08:17:31,092 - httpx - INFO - HTTP Request: GET http://host.docker.internal:54321/rest/v1/projects?id=eq.c67f50fe-6446-433a-ad0a-24623332bf83&select=id%2Cuser_id%2Cname "HTTP/1.1 200 OK"
+2025-08-03 08:17:31,094 - services.artifact_manager - INFO - Project lookup response: 200 - [{"id":"c67f50fe-6446-433a-ad0a-24623332bf83","user_id":"user_30ldVcIFSxgNTvcuP0CL48ttRWK","name":"Screenshot 2025-08-03"}]
+2025-08-03 08:17:31,094 - services.artifact_manager - INFO - Found project data: {'id': 'c67f50fe-6446-433a-ad0a-24623332bf83', 'user_id': 'user_30ldVcIFSxgNTvcuP0CL48ttRWK', 'name': 'Screenshot 2025-08-03'}
+2025-08-03 08:17:31,095 - services.artifact_manager - INFO - Retrieved project_data: {'id': 'c67f50fe-6446-433a-ad0a-24623332bf83', 'user_id': 'user_30ldVcIFSxgNTvcuP0CL48ttRWK', 'name': 'Screenshot 2025-08-03'}
+2025-08-03 08:17:31,096 - services.artifact_manager - INFO - Extracted user_id: user_30ldVcIFSxgNTvcuP0CL48ttRWK
+2025-08-03 08:17:31,168 - httpx - INFO - HTTP Request: POST http://host.docker.internal:54321/rest/v1/artifacts "HTTP/1.1 201 Created"
+2025-08-03 08:17:31,169 - services.artifact_manager - INFO - Created artifact 13a7d959-be31-4767-a891-6b84a81aed92 for project c67f50fe-6446-433a-ad0a-24623332bf83
+2025-08-03 08:17:31,169 - main - INFO - Code generation completed for project c67f50fe-6446-433a-ad0a-24623332bf83
+2025-08-03 08:20:49,541 - main - INFO - Starting code generation for project c67f50fe-6446-433a-ad0a-24623332bf83
+2025-08-03 08:20:50,292 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 404 Not Found"
+2025-08-03 08:20:50,295 - services.code_generator - WARNING - Model gpt-4o-preview unavailable (Error code: 404 - {'error': {'message': 'The model `gpt-4o-preview` does not exist or you do not have access to it.', 'type': 'invalid_request_error', 'param': None, 'code': 'model_not_found'}}). Falling back to gpt-4o-mini.
+2025-08-03 08:21:18,554 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-08-03 08:21:18,586 - services.code_generator - INFO - OpenAI response length: 4474
+2025-08-03 08:21:18,590 - services.artifact_manager - INFO - Looking up project details for c67f50fe-6446-433a-ad0a-24623332bf83
+2025-08-03 08:21:18,664 - httpx - INFO - HTTP Request: GET http://host.docker.internal:54321/rest/v1/projects?id=eq.c67f50fe-6446-433a-ad0a-24623332bf83&select=id%2Cuser_id%2Cname "HTTP/1.1 200 OK"
+2025-08-03 08:21:18,666 - services.artifact_manager - INFO - Project lookup response: 200 - [{"id":"c67f50fe-6446-433a-ad0a-24623332bf83","user_id":"user_30ldVcIFSxgNTvcuP0CL48ttRWK","name":"Screenshot 2025-08-03"}]
+2025-08-03 08:21:18,667 - services.artifact_manager - INFO - Found project data: {'id': 'c67f50fe-6446-433a-ad0a-24623332bf83', 'user_id': 'user_30ldVcIFSxgNTvcuP0CL48ttRWK', 'name': 'Screenshot 2025-08-03'}
+2025-08-03 08:21:18,668 - services.artifact_manager - INFO - Retrieved project_data: {'id': 'c67f50fe-6446-433a-ad0a-24623332bf83', 'user_id': 'user_30ldVcIFSxgNTvcuP0CL48ttRWK', 'name': 'Screenshot 2025-08-03'}
+2025-08-03 08:21:18,669 - services.artifact_manager - INFO - Extracted user_id: user_30ldVcIFSxgNTvcuP0CL48ttRWK
+2025-08-03 08:21:18,721 - httpx - INFO - HTTP Request: POST http://host.docker.internal:54321/rest/v1/artifacts "HTTP/1.1 201 Created"
+2025-08-03 08:21:18,723 - services.artifact_manager - INFO - Created artifact 73d7d7b2-2973-4383-b8b1-d6369808e25a for project c67f50fe-6446-433a-ad0a-24623332bf83
+2025-08-03 08:21:18,723 - main - INFO - Code generation completed for project c67f50fe-6446-433a-ad0a-24623332bf83
+2025-08-03 10:41:57,032 - main - INFO - Starting code generation for project a6bf3a02-4b53-4ae9-9ebb-5416d03fac1f
+2025-08-03 10:41:58,027 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 404 Not Found"
+2025-08-03 10:41:58,036 - services.code_generator - WARNING - Model gpt-4o-preview unavailable (Error code: 404 - {'error': {'message': 'The model `gpt-4o-preview` does not exist or you do not have access to it.', 'type': 'invalid_request_error', 'param': None, 'code': 'model_not_found'}}). Falling back to gpt-4o-mini.
+2025-08-03 10:42:17,832 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-08-03 10:42:17,922 - services.code_generator - INFO - OpenAI response length: 4435
+2025-08-03 10:42:17,924 - services.artifact_manager - INFO - Looking up project details for a6bf3a02-4b53-4ae9-9ebb-5416d03fac1f
+2025-08-03 10:42:18,017 - httpx - INFO - HTTP Request: GET http://host.docker.internal:54321/rest/v1/projects?id=eq.a6bf3a02-4b53-4ae9-9ebb-5416d03fac1f&select=id%2Cuser_id%2Cname "HTTP/1.1 200 OK"
+2025-08-03 10:42:18,018 - services.artifact_manager - INFO - Project lookup response: 200 - [{"id":"a6bf3a02-4b53-4ae9-9ebb-5416d03fac1f","user_id":"user_30ldVcIFSxgNTvcuP0CL48ttRWK","name":"Screenshot 2025-08-03"}]
+2025-08-03 10:42:18,019 - services.artifact_manager - INFO - Found project data: {'id': 'a6bf3a02-4b53-4ae9-9ebb-5416d03fac1f', 'user_id': 'user_30ldVcIFSxgNTvcuP0CL48ttRWK', 'name': 'Screenshot 2025-08-03'}
+2025-08-03 10:42:18,020 - services.artifact_manager - INFO - Retrieved project_data: {'id': 'a6bf3a02-4b53-4ae9-9ebb-5416d03fac1f', 'user_id': 'user_30ldVcIFSxgNTvcuP0CL48ttRWK', 'name': 'Screenshot 2025-08-03'}
+2025-08-03 10:42:18,021 - services.artifact_manager - INFO - Extracted user_id: user_30ldVcIFSxgNTvcuP0CL48ttRWK
+2025-08-03 10:42:18,075 - httpx - INFO - HTTP Request: POST http://host.docker.internal:54321/rest/v1/artifacts "HTTP/1.1 201 Created"
+2025-08-03 10:42:18,076 - services.artifact_manager - INFO - Created artifact feecf091-c61c-4565-8e3f-02df78d089ad for project a6bf3a02-4b53-4ae9-9ebb-5416d03fac1f
+2025-08-03 10:42:18,076 - main - INFO - Code generation completed for project a6bf3a02-4b53-4ae9-9ebb-5416d03fac1f
+2025-08-03 10:46:19,655 - main - INFO - Starting code generation for project a6bf3a02-4b53-4ae9-9ebb-5416d03fac1f
+2025-08-03 10:46:21,455 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 404 Not Found"
+2025-08-03 10:46:21,465 - services.code_generator - WARNING - Model gpt-4o-preview unavailable (Error code: 404 - {'error': {'message': 'The model `gpt-4o-preview` does not exist or you do not have access to it.', 'type': 'invalid_request_error', 'param': None, 'code': 'model_not_found'}}). Falling back to gpt-4o-mini.
+2025-08-03 10:46:42,723 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-08-03 10:46:42,752 - services.code_generator - INFO - OpenAI response length: 4523
+2025-08-03 10:46:42,754 - services.artifact_manager - INFO - Looking up project details for a6bf3a02-4b53-4ae9-9ebb-5416d03fac1f
+2025-08-03 10:46:42,839 - httpx - INFO - HTTP Request: GET http://host.docker.internal:54321/rest/v1/projects?id=eq.a6bf3a02-4b53-4ae9-9ebb-5416d03fac1f&select=id%2Cuser_id%2Cname "HTTP/1.1 200 OK"
+2025-08-03 10:46:42,840 - services.artifact_manager - INFO - Project lookup response: 200 - [{"id":"a6bf3a02-4b53-4ae9-9ebb-5416d03fac1f","user_id":"user_30ldVcIFSxgNTvcuP0CL48ttRWK","name":"Screenshot 2025-08-03"}]
+2025-08-03 10:46:42,841 - services.artifact_manager - INFO - Found project data: {'id': 'a6bf3a02-4b53-4ae9-9ebb-5416d03fac1f', 'user_id': 'user_30ldVcIFSxgNTvcuP0CL48ttRWK', 'name': 'Screenshot 2025-08-03'}
+2025-08-03 10:46:42,841 - services.artifact_manager - INFO - Retrieved project_data: {'id': 'a6bf3a02-4b53-4ae9-9ebb-5416d03fac1f', 'user_id': 'user_30ldVcIFSxgNTvcuP0CL48ttRWK', 'name': 'Screenshot 2025-08-03'}
+2025-08-03 10:46:42,842 - services.artifact_manager - INFO - Extracted user_id: user_30ldVcIFSxgNTvcuP0CL48ttRWK
+2025-08-03 10:46:42,896 - httpx - INFO - HTTP Request: POST http://host.docker.internal:54321/rest/v1/artifacts "HTTP/1.1 201 Created"
+2025-08-03 10:46:42,897 - services.artifact_manager - INFO - Created artifact e7d2da06-9884-4480-a81b-81952854288d for project a6bf3a02-4b53-4ae9-9ebb-5416d03fac1f
+2025-08-03 10:46:42,897 - main - INFO - Code generation completed for project a6bf3a02-4b53-4ae9-9ebb-5416d03fac1f
