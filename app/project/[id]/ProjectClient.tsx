@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { ArrowLeft } from 'lucide-react'
 import PromptEditor from '@/components/PromptEditor'
+import { useToast } from '@/hooks/use-toast'
 
 interface Project {
   id: string
@@ -23,6 +24,7 @@ interface ProjectClientProps {
 export default function ProjectClient({ project }: ProjectClientProps) {
   const router = useRouter()
   const [isGenerating, setIsGenerating] = useState(false)
+  const { toast } = useToast()
 
   const handlePromptGenerated = (prompt: string) => {
     console.log('Prompt generated:', prompt)
@@ -69,7 +71,11 @@ export default function ProjectClient({ project }: ProjectClientProps) {
       }
     } catch (error) {
       console.error('Code generation error:', error)
-      alert(error instanceof Error ? error.message : 'Failed to generate code')
+      toast({
+        title: "Code Generation Failed",
+        description: error instanceof Error ? error.message : 'Failed to generate code',
+        variant: "destructive",
+      })
     } finally {
       setIsGenerating(false)
     }

@@ -3,6 +3,7 @@ import localFont from 'next/font/local'
 import { ClerkProvider } from '@clerk/nextjs'
 import './globals.css'
 import TanstackClientProvider from '@/components/providers/tanstack-client-provider'
+import { Toaster } from '@/components/ui/toaster'
 
 const geistSans = localFont({
   src: './fonts/GeistVF.woff',
@@ -30,6 +31,7 @@ export default function RootLayout({
       <html lang="en">
         <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
           <TanstackClientProvider>{children}</TanstackClientProvider>
+          <Toaster />
         </body>
       </html>
     </ClerkProvider>
