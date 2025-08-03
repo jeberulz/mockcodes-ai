@@ -1,17 +1,44 @@
+import Link from 'next/link'
 import UploadDropzone from './UploadDropzone'
 
-export default function Hero() {
+interface HeroProps {
+  isSignedIn?: boolean
+}
+
+export default function Hero({ isSignedIn = false }: HeroProps) {
   return (
     <section className="container sm:px-6 flex flex-col gap-10 items-center text-center mx-auto pt-10 min-h-[calc(100vh-120px)] justify-center">
       <h1 className="text-5xl md:text-7xl font-normal tracking-tight font-instrument-serif">
-        Effortless{' '}
-        <span className="bg-clip-text text-transparent bg-gradient-to-r from-orange-400 via-pink-400 to-purple-400">
-          Screenshot Analysis
-        </span>
+        {isSignedIn ? (
+          <>
+            Welcome back to{' '}
+            <span className="bg-clip-text text-transparent bg-gradient-to-r from-orange-400 via-pink-400 to-purple-400">
+              MockCodes
+            </span>
+          </>
+        ) : (
+          <>
+            Effortless{' '}
+            <span className="bg-clip-text text-transparent bg-gradient-to-r from-orange-400 via-pink-400 to-purple-400">
+              Screenshot Analysis
+            </span>
+          </>
+        )}
       </h1>
+      
       <p className="max-w-2xl text-lg leading-relaxed text-white/70 font-geist tracking-tight mx-auto">
-        Drag &amp; drop any screenshot to instantly receive UI quality metrics,
-        accessibility checks, and color contrast insights.
+        {isSignedIn ? (
+          <>
+            Ready to convert your UI screenshots into production-ready code? 
+            Upload a new screenshot below or check your{' '}
+            <Link href="/dashboard" className="text-orange-400 hover:text-orange-300 underline">
+              dashboard
+            </Link>{' '}
+            for existing projects.
+          </>
+        ) : (
+          'Drag & drop any screenshot to instantly receive UI quality metrics, accessibility checks, and color contrast insights.'
+        )}
       </p>
 
       <UploadDropzone />
