@@ -2,21 +2,14 @@ import { auth } from '@clerk/nextjs/server'
 import { redirect } from 'next/navigation'
 import UploadComponent from '@/components/Upload'
 
+const SIGN_IN_PATH = '/sign-in'
+
 export default async function UploadPage() {
   const { userId } = await auth()
 
   // Redirect to sign-in if not authenticated
   if (!userId) {
-    redirect('/sign-in')
-  }
-
-  const handleFileSelect = (file: File) => {
-    console.log('File selected:', file.name)
-  }
-
-  const handleUploadComplete = (imageUrl: string) => {
-    console.log('Upload complete:', imageUrl)
-    // Could redirect to preview page or show success message
+    redirect(SIGN_IN_PATH)
   }
 
   return (
@@ -32,10 +25,7 @@ export default async function UploadPage() {
           </p>
         </div>
 
-        <UploadComponent 
-          onFileSelect={handleFileSelect}
-          onUploadComplete={handleUploadComplete}
-        />
+        <UploadComponent />
 
         <div className="mt-8 text-center">
           <p className="text-sm text-gray-500 dark:text-gray-400">

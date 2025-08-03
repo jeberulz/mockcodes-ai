@@ -1,9 +1,16 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { auth } from '@clerk/nextjs/server'
-import { createClient } from '@/utils/supabase/server'
+import { createClerkSupabaseClientSsr } from '@/utils/supabase/server'
+import { createHash } from 'crypto'
 
 const MAX_FILE_SIZE = 5 * 1024 * 1024 // 5MB
 const ALLOWED_TYPES = ['image/png', 'image/jpeg']
+
+// MIME type to extension mapping
+const MIME_TO_EXTENSION: Record<string, string> = {
+  'image/png': 'png',
+  'image/jpeg': 'jpg'
+}
 
 export async function POST(request: NextRequest) {
   try {
@@ -35,12 +42,37 @@ export async function POST(request: NextRequest) {
     }
 
     // Initialize Supabase client
-    const supabase = await createClient()
+    const supabase = await createClerkSupabaseClientSsr()
 
-    // Generate unique filename
+    // Generate unique filename with validation
     const timestamp = Date.now()
-    const fileExtension = file.name.split('.').pop()
-    const fileName = `screenshots/${userId}/${timestamp}.${fileExtension}`
+    
+    // Extract and validate file extension
+    let fileExtension: string
+    const originalFileName = file.name
+    const lastDotIndex = originalFileName.lastIndexOf('.')
+    
+    if (lastDotIndex === -1) {
+      // No extension found, use MIME type to determine extension
+      fileExtension = MIME_TO_EXTENSION[file.type] || 'bin'
+    } else {
+      // Extension exists, extract it
+      const extractedExt = originalFileName.slice(lastDotIndex + 1).toLowerCase()
+      const expectedExt = MIME_TO_EXTENSION[file.type]
+      
+      // Validate extension matches MIME type
+      if (expectedExt && extractedExt !== expectedExt && extractedExt !== 'jpeg') {
+        return NextResponse.json({ 
+          error: `File extension '${extractedExt}' does not match file type '${file.type}'` 
+        }, { status: 400 })
+      }
+      
+      fileExtension = expectedExt || extractedExt
+    }
+    
+    // Create anonymized user identifier
+    const userHash = createHash('sha256').update(userId).digest('hex').substring(0, 12)
+    const fileName = `screenshots/${userHash}/${timestamp}.${fileExtension}`
 
     // Convert File to ArrayBuffer
     const arrayBuffer = await file.arrayBuffer()
@@ -79,7 +111,7 @@ export async function POST(request: NextRequest) {
       .insert([
         {
           user_id: userId,
-          name: `Screenshot ${new Date().toLocaleDateString()}`,
+          name: `Screenshot ${new Date().toISOString().split('T')[0]}`,
           screenshot_url: urlData.publicUrl,
           status: 'active'
         }

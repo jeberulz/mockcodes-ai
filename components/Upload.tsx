@@ -3,6 +3,7 @@
 import { useState, useCallback } from 'react'
 import { useDropzone } from 'react-dropzone'
 import { useUser } from '@clerk/nextjs'
+import { useRouter } from 'next/navigation'
 import { Upload, X, AlertCircle, Image as ImageIcon } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Alert, AlertDescription } from '@/components/ui/alert'
@@ -10,17 +11,14 @@ import { Progress } from '@/components/ui/progress'
 import Image from 'next/image'
 
 interface UploadProps {
-  onFileSelect?: (file: File) => void
-  onUploadComplete?: (imageUrl: string) => void
   className?: string
 }
 
 export default function UploadComponent({ 
-  onFileSelect, 
-  onUploadComplete, 
   className = '' 
 }: UploadProps) {
   const { user, isSignedIn } = useUser()
+  const router = useRouter()
   const [uploadedFile, setUploadedFile] = useState<File | null>(null)
   const [previewUrl, setPreviewUrl] = useState<string | null>(null)
   const [uploadProgress, setUploadProgress] = useState(0)
@@ -52,14 +50,16 @@ export default function UploadComponent({
       const file = acceptedFiles[0]
       setUploadedFile(file)
       
+      // Revoke previous preview URL to prevent memory leak
+      if (previewUrl) {
+        URL.revokeObjectURL(previewUrl)
+      }
+      
       // Create preview URL
       const url = URL.createObjectURL(file)
       setPreviewUrl(url)
-      
-      // Notify parent component
-      onFileSelect?.(file)
     }
-  }, [onFileSelect])
+  }, [])
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
@@ -83,7 +83,9 @@ export default function UploadComponent({
     try {
       const formData = new FormData()
       formData.append('file', uploadedFile)
-      formData.append('userId', user?.id || '')
+      if (user?.id) {
+        formData.append('userId', user.id)
+      }
 
       // Simulate upload progress
       const progressInterval = setInterval(() => {
@@ -110,7 +112,14 @@ export default function UploadComponent({
       }
 
       const data = await response.json()
-      onUploadComplete?.(data.imageUrl)
+      
+      // Navigate to preview page with the project ID
+      if (data.projectId) {
+        router.push(`/projects/${data.projectId}/preview`)
+      } else {
+        // Fallback to dashboard if no project ID returned
+        router.push('/dashboard')
+      }
       
       // Success state - keep the preview but show success
       setTimeout(() => {
@@ -173,6 +182,7 @@ export default function UploadComponent({
                   src={previewUrl}
                   alt="Screenshot preview"
                   fill
+                  sizes="(max-width: 768px) 100vw, 500px"
                   className="object-contain"
                 />
               </div>

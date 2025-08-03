@@ -14,8 +14,21 @@ export default function UploadDropzone() {
 
   const handleUploadComplete = (imageUrl: string) => {
     console.log('Upload completed:', imageUrl)
-    // Redirect to dashboard or preview page after upload
-    router.push('/dashboard')
+    
+    // Validate upload success
+    if (!imageUrl || imageUrl.trim() === '') {
+      console.error('Upload failed: No image URL received')
+      // Could add user notification here
+      return
+    }
+    
+    // Redirect to dashboard with error handling
+    try {
+      router.push('/dashboard')
+    } catch (error) {
+      console.error('Navigation error:', error)
+      // Could add fallback navigation or user notification
+    }
   }
 
   return (
