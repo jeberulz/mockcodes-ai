@@ -40,14 +40,12 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Project not found' }, { status: 404 })
     }
 
-    // Extract the file path from the screenshot URL
-    // URL format: http://127.0.0.1:54321/storage/v1/object/sign/screenshots/path/file.png?token=...
-    const urlParts = project.screenshot_url.split('/storage/v1/object/sign/')[1]
-    const filePath = urlParts ? urlParts.split('?')[0] : null
-    
+    // The screenshot_url now stores only the storage path (e.g., 'screenshots/<uuid>.png')
+    const filePath = project.screenshot_url
+
     if (!filePath) {
-      console.error('Could not extract file path from URL:', project.screenshot_url)
-      return NextResponse.json({ error: 'Invalid screenshot URL' }, { status: 400 })
+      console.error('Missing screenshot file path.')
+      return NextResponse.json({ error: 'Invalid screenshot file path' }, { status: 400 })
     }
 
     // Download the image directly from Supabase storage
@@ -55,7 +53,7 @@ export async function POST(request: NextRequest) {
     try {
       const { data: fileData, error: downloadError } = await supabase.storage
         .from('screenshots')
-        .download(filePath.replace('screenshots/', ''))
+        .download(filePath) // path stored exactly as in bucket
 
       if (downloadError || !fileData) {
         console.error('Failed to download image:', downloadError)

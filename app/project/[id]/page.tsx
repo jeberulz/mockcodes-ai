@@ -32,6 +32,18 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
     .eq('user_id', userId)
     .single()
 
+  // Generate a fresh signed URL so the client can access the image
+  if (project && project.screenshot_url) {
+    // Use the full path as stored (already includes screenshots/ prefix)
+    const normalizedPath = project.screenshot_url.replace(/^\/+/, '') // remove leading slashes only
+    const { data: signedData } = await supabase.storage
+      .from('screenshots')
+      .createSignedUrl(normalizedPath, 3600)
+    if (signedData?.signedUrl) {
+      project.screenshot_url = signedData.signedUrl
+    }
+  }
+
   if (error || !project) {
     redirect('/dashboard')
   }

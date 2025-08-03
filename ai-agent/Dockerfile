@@ -4,8 +4,8 @@ FROM python:3.11-slim
 WORKDIR /app
 
 # Install system dependencies
-RUN apt-get update && apt-get install -y \
-    curl \
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    curl wget \
     && rm -rf /var/lib/apt/lists/*
 
 # Copy requirements first for better caching

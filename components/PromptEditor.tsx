@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback, useRef } from 'react'
 import { Button } from '@/components/ui/button'
 import { Textarea } from '@/components/ui/textarea'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
@@ -37,18 +37,12 @@ export default function PromptEditor({
   const [customPrompt, setCustomPrompt] = useState('')
   const [error, setError] = useState<string | null>(null)
   const [copied, setCopied] = useState(false)
+  const copyTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
-  // Auto-analyze the image when component mounts
-  useEffect(() => {
-    if (projectId) {
-      analyzeImage()
-    }
-  }, [projectId])
-
-  const analyzeImage = async () => {
+  const analyzeImage = useCallback(async () => {
     setIsAnalyzing(true)
     setError(null)
-    
+
     try {
       const response = await fetch('/api/generate-prompt', {
         method: 'POST',
@@ -71,7 +65,14 @@ export default function PromptEditor({
     } finally {
       setIsAnalyzing(false)
     }
-  }
+  }, [projectId, onPromptGenerated])
+
+  // Auto-analyze the image when component mounts
+  useEffect(() => {
+    if (projectId) {
+      analyzeImage()
+    }
+  }, [analyzeImage])
 
   const handleGenerateCode = async () => {
     if (!customPrompt.trim()) return
@@ -89,9 +90,17 @@ export default function PromptEditor({
   }
 
   const copyPrompt = async () => {
-    await navigator.clipboard.writeText(customPrompt)
-    setCopied(true)
-    setTimeout(() => setCopied(false), 2000)
+    try {
+      await navigator.clipboard.writeText(customPrompt)
+      setCopied(true)
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to copy prompt to clipboard')
+    } finally {
+      if (copyTimeoutRef.current) {
+        clearTimeout(copyTimeoutRef.current)
+      }
+      copyTimeoutRef.current = setTimeout(() => setCopied(false), 2000)
+    }
   }
 
   return (

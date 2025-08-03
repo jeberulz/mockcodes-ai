@@ -3,7 +3,7 @@ import logging
 from typing import Dict, Optional, Any
 import openai
 import anthropic
-from openai import OpenAI
+from openai import AsyncOpenAI
 from anthropic import Anthropic
 
 logger = logging.getLogger(__name__)
@@ -17,7 +17,7 @@ class CodeGenerator:
         
         # Initialize OpenAI client
         if os.getenv("OPENAI_API_KEY"):
-            self.openai_client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+            self.openai_client = AsyncOpenAI(api_key=os.getenv("OPENAI_API_KEY"))
             logger.info("OpenAI client initialized")
         
         # Initialize Anthropic client
@@ -43,7 +43,7 @@ class CodeGenerator:
             
             # Fallback to Anthropic Claude
             elif self.anthropic_client:
-                return await self._generate_with_anthropic(prompt, preferences)
+                return self._generate_with_anthropic(prompt, preferences)
             
             else:
                 raise RuntimeError("No AI providers available")
@@ -101,7 +101,7 @@ Make the code production-ready and visually appealing."""
         model_name = os.getenv("OPENAI_GPT_MODEL", "gpt-4o-preview")
 
         try:
-            response = self.openai_client.chat.completions.create(
+            response = await self.openai_client.chat.completions.create(
                 model=model_name,
                 messages=messages,
                 max_tokens=8000,
@@ -110,7 +110,7 @@ Make the code production-ready and visually appealing."""
             )
         except Exception as e:  # Fallback on model errors or invalid request
             logger.warning(f"Model {model_name} unavailable ({e}). Falling back to gpt-4o-mini.")
-            response = self.openai_client.chat.completions.create(
+            response = await self.openai_client.chat.completions.create(
                 model="gpt-4o-mini",
                 messages=messages,
                 max_tokens=8000,
@@ -125,21 +125,21 @@ Make the code production-ready and visually appealing."""
         logger.info(f"OpenAI response length: {len(content)}")
         logger.debug(f"OpenAI response preview: {content[:200]}...")
         
-        import json
+        import json, re
         try:
             result = json.loads(content)
         except json.JSONDecodeError as e:
             logger.error(f"Failed to parse OpenAI response as JSON: {e}")
             logger.error(f"Response content: {content}")
-            # Try to fix common JSON issues
-            try:
-                # Remove any trailing commas and fix incomplete strings
-                cleaned_content = content.strip()
-                if not cleaned_content.endswith('}'):
-                    cleaned_content += '"}'
-                result = json.loads(cleaned_content)
-                logger.info("Successfully parsed cleaned JSON")
-            except:
+            # Attempt to extract JSON enclosed in triple backtick code fences
+            match = re.search(r"```(?:json)?\s*(\{.*?\})\s*```", content, re.DOTALL | re.IGNORECASE)
+            if match:
+                try:
+                    result = json.loads(match.group(1))
+                    logger.info("Successfully parsed JSON extracted from code block")
+                except json.JSONDecodeError:
+                    raise RuntimeError(f"Invalid JSON response from OpenAI: {e}")
+            else:
                 raise RuntimeError(f"Invalid JSON response from OpenAI: {e}")
         
         # Validate response structure
@@ -147,10 +147,10 @@ Make the code production-ready and visually appealing."""
         for key in required_keys:
             if key not in result:
                 result[key] = ""
-        
+
         return result
-    
-    async def _generate_with_anthropic(
+
+    def _generate_with_anthropic(
         self, 
         prompt: str, 
         preferences: Optional[Dict[str, Any]] = None

@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { useToast } from '@/hooks/use-toast'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
@@ -35,6 +36,7 @@ interface CodeAccessProps {
 export default function CodeAccess({ projectId, artifact, className = '' }: CodeAccessProps) {
   const [copiedItem, setCopiedItem] = useState<string | null>(null)
   const [isDownloading, setIsDownloading] = useState(false)
+  const { toast } = useToast()
 
   const copyToClipboard = async (text: string, itemId: string) => {
     await navigator.clipboard.writeText(text)
@@ -59,6 +61,11 @@ export default function CodeAccess({ projectId, artifact, className = '' }: Code
       document.body.removeChild(a)
     } catch (error) {
       console.error('Download failed:', error)
+      toast({
+        title: 'Download failed',
+        description: 'Unable to download ZIP. Please try again.',
+        variant: 'destructive'
+      })
     } finally {
       setIsDownloading(false)
     }

@@ -1,12 +1,10 @@
 import os
 import logging
-import asyncio
 from contextlib import asynccontextmanager
 from fastapi import FastAPI, HTTPException, BackgroundTasks
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from typing import Optional, Dict, Any
-import httpx
 from dotenv import load_dotenv
 
 from services.code_generator import CodeGenerator
@@ -72,7 +70,8 @@ app.add_middleware(
 class ScaffoldRequest(BaseModel):
     prompt: str
     project_id: str
-    image_url: Optional[str] = None
+    image_url: Optional[str] = None  # Legacy param (data URI or http URL)
+    image_base64: Optional[str] = None  # New param, preferred
     preferences: Optional[Dict[str, Any]] = None
 
 class ScaffoldResponse(BaseModel):
@@ -108,9 +107,12 @@ async def scaffold_code(request: ScaffoldRequest, background_tasks: BackgroundTa
         logger.info(f"Starting code generation for project {request.project_id}")
         
         # Generate code using AI
+                # Prefer new image_base64 param; fall back to legacy image_url
+        image_param = request.image_base64 or request.image_url
+
         generated_code = await code_generator.generate_from_prompt(
             prompt=request.prompt,
-            image_url=request.image_url,
+            image_url=image_param,
             preferences=request.preferences or {}
         )
         
@@ -150,6 +152,12 @@ async def preview_artifact(artifact_id: str):
         from fastapi.responses import HTMLResponse
         return HTMLResponse(content=html_content)
         
+    except RuntimeError as e:
+        if "Artifact not found" in str(e):
+            raise HTTPException(status_code=404, detail="Artifact not found")
+        else:
+            logger.error(f"Preview generation failed: {e}")
+            raise HTTPException(status_code=500, detail=str(e))
     except Exception as e:
         logger.error(f"Preview generation failed: {e}")
         raise HTTPException(status_code=500, detail=str(e))

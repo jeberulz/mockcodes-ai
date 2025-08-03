@@ -7,10 +7,14 @@ services:
     ports:
       - "8000:8000"
     environment:
-      - OPENAI_API_KEY=${OPENAI_API_KEY}
-      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}
       - SUPABASE_URL=${SUPABASE_URL:-http://host.docker.internal:54321}
-      - SUPABASE_SERVICE_ROLE_KEY=${SUPABASE_SERVICE_ROLE_KEY}
+    secrets:
+      - source: openai_api_key
+        target: OPENAI_API_KEY
+      - source: anthropic_api_key
+        target: ANTHROPIC_API_KEY
+      - source: supabase_service_role_key
+        target: SUPABASE_SERVICE_ROLE_KEY
     volumes:
       - ./logs:/app/logs
       - ./temp:/app/temp
@@ -27,3 +31,11 @@ services:
 networks:
   mockcodes-network:
     driver: bridge
+
+secrets:
+  openai_api_key:
+    file: ./secrets/openai_api_key
+  anthropic_api_key:
+    file: ./secrets/anthropic_api_key
+  supabase_service_role_key:
+    file: ./secrets/supabase_service_role_key

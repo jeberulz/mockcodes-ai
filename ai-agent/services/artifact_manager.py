@@ -1,9 +1,12 @@
 import os
 import uuid
 import logging
+import html
+import base64
 from typing import Dict, Optional, Any
 from datetime import datetime
 import httpx
+from bs4 import BeautifulSoup, Comment
 
 logger = logging.getLogger(__name__)
 
@@ -113,21 +116,28 @@ class ArtifactManager:
         return artifact.get("preview_html", "")
     
     def _generate_preview_html(self, html: str, css: str, js: str) -> str:
-        """Generate a complete HTML preview"""
+        """Generate a secure sandboxed HTML preview"""
+        
+        # Sanitize all inputs first
+        sanitized_html = self._sanitize_html(html)
+        sanitized_css = self._sanitize_css(css)
+        sanitized_js = self._sanitize_javascript(js)
         
         # Extract body content from HTML if it's a complete document
-        body_content = self._extract_body_content(html)
+        body_content = self._extract_body_content(sanitized_html)
         
-        preview_template = f"""<!DOCTYPE html>
+        # Create the preview content in a sandboxed iframe
+        inner_html = f"""<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MockCodes Preview</title>
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' https://cdn.tailwindcss.com; script-src 'self' 'unsafe-inline' https://cdn.tailwindcss.com; style-src 'self' 'unsafe-inline' https://cdn.tailwindcss.com;">
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         /* Custom CSS */
-        {css}
+        {sanitized_css}
         
         /* Preview-specific styles */
         body {{
@@ -145,19 +155,161 @@ class ArtifactManager:
     {body_content}
     
     <script>
-        // Custom JavaScript
-        {js}
+        // Custom JavaScript (sanitized)
+        {sanitized_js}
         
         // Preview enhancements
         document.addEventListener('DOMContentLoaded', function() {{
-            // Add any preview-specific functionality here
             console.log('MockCodes preview loaded');
         }});
     </script>
 </body>
 </html>"""
         
-        return preview_template
+        # Encode the content as base64 for safe data URL
+        encoded_content = base64.b64encode(inner_html.encode('utf-8')).decode('utf-8')
+        
+        # Create wrapper HTML with sandboxed iframe
+        wrapper_template = f"""<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MockCodes Preview - Secure</title>
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; frame-src data:; style-src 'self' 'unsafe-inline';">
+    <style>
+        body {{
+            margin: 0;
+            padding: 0;
+            font-family: system-ui, -apple-system, sans-serif;
+        }}
+        .preview-container {{
+            width: 100%;
+            height: 100vh;
+            border: none;
+        }}
+        .security-notice {{
+            background: #fef3c7;
+            color: #92400e;
+            padding: 8px 16px;
+            font-size: 12px;
+            text-align: center;
+            border-bottom: 1px solid #f59e0b;
+        }}
+    </style>
+</head>
+<body>
+    <div class="security-notice">
+        🔒 This preview is running in a secure sandboxed environment
+    </div>
+    <iframe 
+        class="preview-container"
+        src="data:text/html;base64,{encoded_content}"
+        sandbox="allow-scripts allow-same-origin allow-forms"
+        title="Secure Preview">
+    </iframe>
+</body>
+</html>"""
+        
+        return wrapper_template
+    
+    def _sanitize_html(self, html_content: str) -> str:
+        """Sanitize HTML content to prevent XSS"""
+        if not html_content:
+            return ""
+        
+        # Parse HTML with BeautifulSoup
+        soup = BeautifulSoup(html_content, 'html.parser')
+        
+        # Remove dangerous tags
+        dangerous_tags = ['script', 'object', 'embed', 'applet', 'meta', 'link']
+        for tag in soup(dangerous_tags):
+            tag.decompose()
+        
+        # Remove comments that might contain malicious code
+        for comment in soup.find_all(string=lambda text: isinstance(text, Comment)):
+            comment.extract()
+        
+        # Remove dangerous attributes
+        dangerous_attrs = ['onload', 'onclick', 'onmouseover', 'onerror', 'onabort', 
+                          'onchange', 'onfocus', 'onblur', 'onsubmit', 'onreset']
+        
+        for tag in soup.find_all():
+            for attr in dangerous_attrs:
+                if tag.has_attr(attr):
+                    del tag[attr]
+            
+            # Sanitize href and src attributes
+            if tag.has_attr('href'):
+                href = tag['href']
+                if href.startswith('javascript:') or href.startswith('data:'):
+                    del tag['href']
+            
+            if tag.has_attr('src'):
+                src = tag['src']
+                if src.startswith('javascript:'):
+                    del tag['src']
+        
+        return str(soup)
+    
+    def _sanitize_css(self, css_content: str) -> str:
+        """Sanitize CSS content to prevent XSS"""
+        if not css_content:
+            return ""
+        
+        # Escape the CSS content to prevent injection
+        sanitized = html.escape(css_content, quote=False)
+        
+        # Remove dangerous CSS properties and values
+        dangerous_patterns = [
+            'javascript:',
+            'expression(',
+            'behavior:',
+            'binding:',
+            '-moz-binding:',
+            'data:',
+            'vbscript:',
+            '@import'
+        ]
+        
+        for pattern in dangerous_patterns:
+            sanitized = sanitized.replace(pattern, '')
+        
+        return sanitized
+    
+    def _sanitize_javascript(self, js_content: str) -> str:
+        """Sanitize JavaScript content to prevent XSS"""
+        if not js_content:
+            return ""
+        
+        # Basic sanitization - escape dangerous characters
+        sanitized = html.escape(js_content, quote=False)
+        
+        # Remove dangerous JavaScript patterns
+        dangerous_patterns = [
+            'eval(',
+            'Function(',
+            'setTimeout(',
+            'setInterval(',
+            'document.write(',
+            'document.writeln(',
+            'innerHTML',
+            'outerHTML',
+            'document.cookie',
+            'localStorage',
+            'sessionStorage',
+            'window.location',
+            'location.href',
+            'location.replace',
+            'location.assign'
+        ]
+        
+        # Note: This is basic sanitization. For production, consider using a proper JS sanitizer
+        # or running JS in a more restricted environment
+        for pattern in dangerous_patterns:
+            sanitized = sanitized.replace(pattern, f'/* BLOCKED: {pattern} */')
+        
+        return sanitized
     
     def _extract_body_content(self, html: str) -> str:
         """Extract content from body tag or return full HTML if no body tag"""

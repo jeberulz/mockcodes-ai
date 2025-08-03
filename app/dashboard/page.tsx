@@ -5,6 +5,19 @@ import { ensureUserProfile } from '@/utils/supabase/user-profile'
 import { createClient } from '@supabase/supabase-js'
 import Link from 'next/link'
 
+// Project type definition for strong typing
+interface Project {
+  id: string;
+  user_id: string;
+  name: string;
+  description?: string;
+  created_at: string;
+  status: 'active' | 'processing' | 'archived';
+  screenshot_url?: string;
+  // Allow additional dynamic fields
+  [key: string]: any;
+}
+
 export default async function DashboardPage() {
   const { userId } = await auth()
   const user = await currentUser()
@@ -22,14 +35,39 @@ export default async function DashboardPage() {
     process.env.SUPABASE_SERVICE_ROLE_KEY!
   )
 
-  const { data: projects, error: projectsError } = await supabase
+  const { data: projectsData, error: projectsError } = await supabase
     .from('projects')
     .select('*')
     .eq('user_id', userId)
-    .order('created_at', { ascending: false })
+    .order('created_at', { ascending: false }) as { data: any[] | null; error: any };
+
+  // Generate fresh signed URLs for private screenshots
+  const projects: Project[] = await Promise.all(
+    (projectsData ?? []).map(async (proj: Project) => {
+      if (proj.screenshot_url) {
+        // Use the full path as stored (already includes screenshots/ prefix)
+        const normalizedPath = proj.screenshot_url.replace(/^\/+/, '') // remove leading slashes only
+        const { data: signedData } = await supabase.storage
+          .from('screenshots')
+          .createSignedUrl(normalizedPath, 3600)
+        if (signedData?.signedUrl) {
+          proj.screenshot_url = signedData.signedUrl
+        }
+      }
+      return proj
+    })
+  )
 
   if (projectsError) {
-    console.error('Error fetching projects:', projectsError)
+    return (
+      <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50 px-4 text-center">
+        <h2 className="text-2xl font-semibold mb-2 text-gray-900">Unable to load projects</h2>
+        <p className="text-gray-600 mb-6 max-w-md">Something went wrong while fetching your projects. Please refresh the page or try again later.</p>
+        <Link href="/dashboard" className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">
+          Retry
+        </Link>
+      </div>
+    )
   }
 
   return (

@@ -38,13 +38,14 @@ export async function GET(
     }
 
     // Fetch the latest artifact for this project
-    const { data: artifact, error: artifactError } = await supabase
+    const { data: artifacts, error: artifactError } = await supabase
       .from('artifacts')
       .select('*')
       .eq('project_id', projectId)
       .order('created_at', { ascending: false })
       .limit(1)
-      .single()
+
+    const artifact = artifacts?.[0]
 
     if (artifactError || !artifact) {
       return NextResponse.json({ error: 'No artifacts found for this project' }, { status: 404 })

@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { auth } from '@clerk/nextjs/server'
+import { auth, currentUser } from '@clerk/nextjs/server'
 import { createClient } from '@supabase/supabase-js'
 import { createHash } from 'crypto'
 
@@ -103,27 +103,44 @@ export async function POST(request: NextRequest) {
       .createSignedUrl(fileName, 3600) // 1 hour expiry
 
     if (urlError || !urlData.signedUrl) {
-      console.error('Failed to get signed URL:', urlError)
-      return NextResponse.json({ 
-        error: 'Failed to get file URL' 
-      }, { status: 500 })
-    }
+  console.error('Failed to get signed URL:', urlError)
+  return NextResponse.json({ 
+    error: 'Failed to get file URL' 
+  }, { status: 500 })
+}
 
-    // Ensure user profile exists first
-    const { data: existingProfile } = await supabase
+    // Prepare storage file path (persist only the path, not the signed URL)
+    const filePath = fileName
+
+    // --- Begin atomic profile + project creation ---
+    let newProfileCreated = false
+
+    // Fetch existing profile (if any)
+    const { data: existingProfile, error: existingProfileError } = await supabase
       .from('user_profiles')
       .select('id')
       .eq('id', userId)
-      .single()
+      .maybeSingle()
+
+    if (existingProfileError) {
+      console.error('Failed to fetch user profile:', existingProfileError)
+      // Roll back: remove uploaded file to prevent orphaned storage objects
+      await supabase.storage.from('screenshots').remove([fileName])
+      return NextResponse.json({ error: 'Failed to fetch user profile' }, { status: 500 })
+    }
 
     if (!existingProfile) {
-      // Create user profile if it doesn't exist
+      // Need to create a new profile first
+      const user = await currentUser()
+      const email =
+        user?.emailAddresses?.[0]?.emailAddress || `user-${userId}@placeholder.local`
+
       const { error: profileError } = await supabase
         .from('user_profiles')
         .insert([
           {
             id: userId,
-            email: '', // Will be updated by webhook
+            email,
             role: 'user',
             prompt_quota: 15,
             prompts_used: 0,
@@ -133,17 +150,22 @@ export async function POST(request: NextRequest) {
 
       if (profileError) {
         console.error('Failed to create user profile:', profileError)
+        // Clean up uploaded file as profile creation failed
+        await supabase.storage.from('screenshots').remove([fileName])
+        return NextResponse.json({ error: 'Failed to create user profile' }, { status: 500 })
       }
+
+      newProfileCreated = true
     }
 
-    // Create project record in database
+    // Create project record linked to the user
     const { data: projectData, error: projectError } = await supabase
       .from('projects')
       .insert([
         {
           user_id: userId,
           name: `Screenshot ${new Date().toISOString().split('T')[0]}`,
-          screenshot_url: urlData.signedUrl,
+          screenshot_url: filePath,
           status: 'active',
           created_at: new Date().toISOString(),
           updated_at: new Date().toISOString()
@@ -153,8 +175,13 @@ export async function POST(request: NextRequest) {
       .single()
 
     if (projectError) {
-      console.error('Database error:', projectError)
-      // Don't return error here - file is uploaded, just log the database issue
+      console.error('Failed to create project:', projectError)
+      // Roll back: remove uploaded file and newly-created profile (if any)
+      await supabase.storage.from('screenshots').remove([fileName])
+      if (newProfileCreated) {
+        await supabase.from('user_profiles').delete().eq('id', userId)
+      }
+      return NextResponse.json({ error: 'Failed to create project' }, { status: 500 })
     }
 
     return NextResponse.json({
