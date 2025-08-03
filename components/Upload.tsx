@@ -12,10 +12,14 @@ import Image from 'next/image'
 
 interface UploadProps {
   className?: string
+  onFileSelect?: (file: File) => void
+  onUploadComplete?: (imageUrl: string) => void
 }
 
 export default function UploadComponent({ 
-  className = '' 
+  className = '',
+  onFileSelect,
+  onUploadComplete
 }: UploadProps) {
   const { user, isSignedIn } = useUser()
   const router = useRouter()
@@ -50,6 +54,9 @@ export default function UploadComponent({
       const file = acceptedFiles[0]
       setUploadedFile(file)
       
+      // Call onFileSelect callback if provided
+      onFileSelect?.(file)
+      
       // Revoke previous preview URL to prevent memory leak
       if (previewUrl) {
         URL.revokeObjectURL(previewUrl)
@@ -59,7 +66,7 @@ export default function UploadComponent({
       const url = URL.createObjectURL(file)
       setPreviewUrl(url)
     }
-  }, [])
+  }, [onFileSelect, previewUrl])
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
@@ -113,12 +120,17 @@ export default function UploadComponent({
 
       const data = await response.json()
       
-      // Navigate to preview page with the project ID
-      if (data.projectId) {
-        router.push(`/projects/${data.projectId}/preview`)
+      // Call onUploadComplete callback if provided
+      if (onUploadComplete && data.imageUrl) {
+        onUploadComplete(data.imageUrl)
       } else {
-        // Fallback to dashboard if no project ID returned
-        router.push('/dashboard')
+        // Navigate to preview page with the project ID
+        if (data.projectId) {
+          router.push(`/projects/${data.projectId}/preview`)
+        } else {
+          // Fallback to dashboard if no project ID returned
+          router.push('/dashboard')
+        }
       }
       
       // Success state - keep the preview but show success
