@@ -39,3 +39,6 @@ next-env.d.ts
 
 # clerk configuration (can include secrets)
 /.clerk/
+
+# Agentic workflow worktrees
+.worktrees/
